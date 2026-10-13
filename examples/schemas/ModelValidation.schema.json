@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "evaluation_report_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evaluation Report Sha256",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "forward_end": {
+      "format": "date-time",
+      "title": "Forward End",
+      "type": "string"
+    },
+    "forward_start": {
+      "format": "date-time",
+      "title": "Forward Start",
+      "type": "string"
+    },
+    "graph_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Graph Sha256",
+      "type": "string"
+    },
+    "inference_deadline_ms": {
+      "maximum": 30000,
+      "minimum": 1,
+      "title": "Inference Deadline Ms",
+      "type": "integer"
+    },
+    "measured_p99_ms": {
+      "maximum": 30000,
+      "minimum": 1,
+      "title": "Measured P99 Ms",
+      "type": "integer"
+    },
+    "passing_scenarios": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Passing Scenarios",
+      "type": "object"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "runtime_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Runtime Sha256",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "training_receipt_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Training Receipt Sha256",
+      "type": "string"
+    },
+    "validation_end": {
+      "format": "date-time",
+      "title": "Validation End",
+      "type": "string"
+    }
+  },
+  "required": [
+    "artifact_sha256",
+    "graph_sha256",
+    "source_sha256",
+    "runtime_sha256",
+    "training_receipt_sha256",
+    "evaluation_report_sha256",
+    "passing_scenarios",
+    "inference_deadline_ms",
+    "measured_p99_ms",
+    "validation_end",
+    "forward_start",
+    "forward_end",
+    "reviewed_at",
+    "expires_at"
+  ],
+  "title": "ModelValidation",
+  "type": "object"
+}

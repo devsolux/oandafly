@@ -1,0 +1,15 @@
+{
+  "artifact_sha256": "<reviewed artifact_sha256>",
+  "completeness": "ALL_CURATED_NEURONS_ALL_INTERNAL_PUBLISHED_EDGES",
+  "curated_neurons": "<reviewed curated_neurons>",
+  "excluded_endpoint_rows": "<reviewed excluded_endpoint_rows>",
+  "expires_at": "<reviewed expires_at>",
+  "internal_connections": "<reviewed internal_connections>",
+  "internal_contacts": "<reviewed internal_contacts>",
+  "release": "<reviewed release>",
+  "reviewed_at": "<reviewed reviewed_at>",
+  "sign_assumptions_report_sha256": "<reviewed sign_assumptions_report_sha256>",
+  "source_sha256": {
+    "<reviewed-key>": "<reviewed reviewed-value>"
+  }
+}

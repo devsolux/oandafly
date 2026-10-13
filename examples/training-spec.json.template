@@ -1,0 +1,22 @@
+{
+  "allocation_scale": 0.0005,
+  "confidence_scale": 0.0003,
+  "format": "oandafly.training.1",
+  "horizon_bars": 3,
+  "kernel": {
+    "dt_ms": 1,
+    "neural_warmup_bars": 10,
+    "recurrent_gain": 0.95,
+    "specification": "MALECNS_FULL_RATE_V1",
+    "steps_per_bar": 20,
+    "tau_ms": 20
+  },
+  "learning_rate": 0.02,
+  "maximum_bars": 20000,
+  "maximum_seconds": 3600,
+  "minimum_net_utility": 5e-05,
+  "regularization": 0.0001,
+  "seed": 1,
+  "train_fraction": 0.65,
+  "validation_fraction": 0.2
+}

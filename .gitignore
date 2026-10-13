@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+build/
+dist/
+*.egg-info/
+.coverage
+htmlcov/
+# Runtime authority and personal financial data must never enter the source tree.
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+*.pem
+*.key
+.env
+.env.*
+credentials/
+private/
+datasets/
+models/
+*.npy
+*.feather
+# Newly generated dependency locks SHOULD be committed after resolution/review.
+
+# Developer mutexes and platform metadata are generated, never project sources.
+.dev-*.lock/
+.DS_Store
+__MACOSX/

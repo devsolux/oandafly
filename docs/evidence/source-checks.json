@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "imported_modules": 77,
+  "import_errors": [],
+  "compileall": "passed",
+  "cli": {
+    "--version": {
+      "exit_code": 0,
+      "output": "oandafly 1.0.0\n"
+    },
+    "--help": {
+      "exit_code": 0,
+      "output": "help printed"
+    },
+    "graph-import --help": {
+      "exit_code": 0,
+      "output": "help printed"
+    },
+    "run --help": {
+      "exit_code": 0,
+      "output": "help printed"
+    },
+    "train-watch --help": {
+      "exit_code": 0,
+      "output": "help printed"
+    },
+    "sign-approval --help": {
+      "exit_code": 0,
+      "output": "help printed"
+    }
+  },
+  "doctor_exit_code": 2
+}

@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "KernelConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "dt_ms": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Dt Ms",
+          "type": "number"
+        },
+        "neural_warmup_bars": {
+          "default": 10,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Neural Warmup Bars",
+          "type": "integer"
+        },
+        "recurrent_gain": {
+          "default": 0.95,
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Recurrent Gain",
+          "type": "number"
+        },
+        "specification": {
+          "const": "MALECNS_FULL_RATE_V1",
+          "default": "MALECNS_FULL_RATE_V1",
+          "title": "Specification",
+          "type": "string"
+        },
+        "steps_per_bar": {
+          "default": 20,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Steps Per Bar",
+          "type": "integer"
+        },
+        "tau_ms": {
+          "default": 20,
+          "exclusiveMinimum": 0,
+          "maximum": 1000,
+          "title": "Tau Ms",
+          "type": "number"
+        }
+      },
+      "title": "KernelConfig",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allocation_scale": {
+      "default": 0.0005,
+      "exclusiveMinimum": 0,
+      "title": "Allocation Scale",
+      "type": "number"
+    },
+    "confidence_scale": {
+      "default": 0.0003,
+      "exclusiveMinimum": 0,
+      "title": "Confidence Scale",
+      "type": "number"
+    },
+    "format": {
+      "const": "oandafly.training.1",
+      "default": "oandafly.training.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "horizon_bars": {
+      "default": 3,
+      "maximum": 288,
+      "minimum": 1,
+      "title": "Horizon Bars",
+      "type": "integer"
+    },
+    "kernel": {
+      "$ref": "#/$defs/KernelConfig",
+      "default": {
+        "dt_ms": 1.0,
+        "neural_warmup_bars": 10,
+        "recurrent_gain": 0.95,
+        "specification": "MALECNS_FULL_RATE_V1",
+        "steps_per_bar": 20,
+        "tau_ms": 20.0
+      }
+    },
+    "learning_rate": {
+      "default": 0.02,
+      "exclusiveMinimum": 0,
+      "maximum": 1,
+      "title": "Learning Rate",
+      "type": "number"
+    },
+    "maximum_bars": {
+      "default": 20000,
+      "maximum": 100000,
+      "minimum": 256,
+      "title": "Maximum Bars",
+      "type": "integer"
+    },
+    "maximum_seconds": {
+      "default": 3600,
+      "maximum": 86400,
+      "minimum": 1,
+      "title": "Maximum Seconds",
+      "type": "integer"
+    },
+    "minimum_net_utility": {
+      "default": 5e-05,
+      "minimum": 0,
+      "title": "Minimum Net Utility",
+      "type": "number"
+    },
+    "regularization": {
+      "default": 0.0001,
+      "maximum": 0.1,
+      "minimum": 0,
+      "title": "Regularization",
+      "type": "number"
+    },
+    "seed": {
+      "default": 1,
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "train_fraction": {
+      "default": 0.65,
+      "exclusiveMaximum": 0.8,
+      "exclusiveMinimum": 0.3,
+      "title": "Train Fraction",
+      "type": "number"
+    },
+    "validation_fraction": {
+      "default": 0.2,
+      "exclusiveMaximum": 0.3,
+      "exclusiveMinimum": 0.05,
+      "title": "Validation Fraction",
+      "type": "number"
+    }
+  },
+  "title": "TrainingSpec",
+  "type": "object"
+}

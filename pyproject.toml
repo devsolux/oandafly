@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oandafly"
+version = "1.0.0"
+description = "Desktop-first full-MaleCNS policy with independently authorized OANDA execution"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "pydantic==2.13.5", "httpx==0.28.1", "cryptography==50.0.1",
+  "numpy==2.3.5", "scipy==1.17.0", "threadpoolctl==3.6.0",
+]
+
+[project.optional-dependencies]
+native-vault = ["keyring==25.7.0", "pywin32==312 ; sys_platform == 'win32'"]
+feather = ["pyarrow>=20,<24"]
+desktop-build = ["pyinstaller==6.22.3"]
+dev = ["pytest==9.1.1", "pytest-asyncio==1.3.0", "ruff==0.16.8", "build==1.6.1"]
+
+[project.scripts]
+oandafly = "oandafly.__main__:main"
+
+[project.gui-scripts]
+oandafly-desktop = "oandafly.desktop:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+oandafly = ["py.typed", "resources/*.json", "resources/icons/*.png", "resources/icons/*.ico", "resources/icons/*.icns"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+asyncio_mode = "auto"
+addopts = "-ra"
+markers = ["desktop_gui: requires a real Tk display (Xvfb allowed for source smoke)", "contained: requires Linux libseccomp and process-spawn support", "sqlite_algorithm: isolated SQL algorithm test, not production WAL qualification", "linux_containment: Linux-only seccomp implementation", "posix_only: POSIX filesystem or launcher semantics"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+[tool.ruff.lint]
+select = ["E4", "E9", "F"]

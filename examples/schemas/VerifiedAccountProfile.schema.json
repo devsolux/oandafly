@@ -1,0 +1,248 @@
+{
+  "$defs": {
+    "CurrencyInstrument": {
+      "additionalProperties": false,
+      "description": "An admitted FX instrument with broker precision, not a legal attestation.",
+      "properties": {
+        "display_precision": {
+          "default": 5,
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Display Precision",
+          "type": "integer"
+        },
+        "instrument_type": {
+          "const": "CURRENCY",
+          "default": "CURRENCY",
+          "title": "Instrument Type",
+          "type": "string"
+        },
+        "margin_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.05",
+          "title": "Margin Rate"
+        },
+        "maximum_order_units": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "100000000",
+          "title": "Maximum Order Units"
+        },
+        "minimum_trade_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "1",
+          "title": "Minimum Trade Size"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "pip_location": {
+          "default": -4,
+          "maximum": 0,
+          "minimum": -10,
+          "title": "Pip Location",
+          "type": "integer"
+        },
+        "trade_units_precision": {
+          "default": 0,
+          "maximum": 8,
+          "minimum": 0,
+          "title": "Trade Units Precision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CurrencyInstrument",
+      "type": "object"
+    },
+    "LeverageRule": {
+      "additionalProperties": false,
+      "properties": {
+        "instrument": {
+          "$ref": "#/$defs/CurrencyInstrument"
+        },
+        "maximum_leverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Maximum Leverage"
+        }
+      },
+      "required": [
+        "instrument",
+        "maximum_leverage"
+      ],
+      "title": "LeverageRule",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A verified claim bundle; construction alone never enrolls its authority.\n\nAuthorityCoordinator.register_profile additionally invokes a trusted,\ndeployment-supplied ProfileVerifier. API instrument type is insufficient.",
+  "properties": {
+    "account_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Account Ids",
+      "type": "array"
+    },
+    "api_binding": {
+      "enum": [
+        "V20",
+        "PAPER"
+      ],
+      "title": "Api Binding",
+      "type": "string"
+    },
+    "authority_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Authority Id",
+      "type": "string"
+    },
+    "broker_entity": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Broker Entity",
+      "type": "string"
+    },
+    "environment": {
+      "enum": [
+        "LIVE",
+        "SANDBOX"
+      ],
+      "title": "Environment",
+      "type": "string"
+    },
+    "evidence_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evidence Sha256",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "home_currency": {
+      "title": "Home Currency",
+      "type": "string"
+    },
+    "instrument_rules": {
+      "items": {
+        "$ref": "#/$defs/LeverageRule"
+      },
+      "maxItems": 300,
+      "minItems": 1,
+      "title": "Instrument Rules",
+      "type": "array"
+    },
+    "legal_product": {
+      "enum": [
+        "NON_CFD_FX",
+        "CFD_FX",
+        "SYNTHETIC_FX"
+      ],
+      "title": "Legal Product",
+      "type": "string"
+    },
+    "negative_balance_protection": {
+      "title": "Negative Balance Protection",
+      "type": "boolean"
+    },
+    "profile_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "region": {
+      "default": "DE",
+      "enum": [
+        "DE",
+        "EU",
+        "GLOBAL"
+      ],
+      "title": "Region",
+      "type": "string"
+    },
+    "retail": {
+      "const": true,
+      "default": true,
+      "title": "Retail",
+      "type": "boolean"
+    },
+    "verification_issuer": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Verification Issuer",
+      "type": "string"
+    },
+    "verified_at": {
+      "format": "date-time",
+      "title": "Verified At",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "profile_id",
+    "version",
+    "authority_id",
+    "environment",
+    "account_ids",
+    "home_currency",
+    "broker_entity",
+    "legal_product",
+    "negative_balance_protection",
+    "api_binding",
+    "instrument_rules",
+    "verification_issuer",
+    "evidence_sha256",
+    "verified_at",
+    "expires_at"
+  ],
+  "title": "VerifiedAccountProfile",
+  "type": "object"
+}

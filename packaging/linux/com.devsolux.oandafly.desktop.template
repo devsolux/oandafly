@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Oandafly
+Comment=Full MaleCNS policy workspace — trading requires independent authorization
+Exec="@EXECUTABLE@"
+Icon=@ICON@
+Terminal=false
+Categories=Office;Finance;
+StartupNotify=true

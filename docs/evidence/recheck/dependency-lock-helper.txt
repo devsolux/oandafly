@@ -1,0 +1,2 @@
+Using CPython 3.13.5 interpreter at: /opt/pyvenv/bin/python
+{"status": "LOCKS_UNRESOLVED", "error_type": "TimeoutExpired", "message": "Command '['/opt/pyvenv/bin/uv', '--no-config', '--no-python-downloads', 'lock', '--python', '/opt/pyvenv/bin/python', '--default-index', 'https://pypi.org/simple']' timed out after 5 seconds", "no_placeholder_locks_created": true}

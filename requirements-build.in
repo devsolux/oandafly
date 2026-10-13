@@ -1,0 +1,9 @@
+# Build-tool inputs only. NOT a resolved or hashed dependency lock.
+# Keep backend pins synchronized with pyproject.toml [build-system].
+setuptools==84.0.0
+wheel==0.48.0
+build==1.6.1
+pyinstaller==6.22.3
+pip-audit==2.10.1
+mypy==1.19.1
+uv==0.12.17

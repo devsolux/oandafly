@@ -1,0 +1,25 @@
+{
+  "python": "3.13.5",
+  "os": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "sqlite": "3.46.1",
+  "version": "1.0.0",
+  "imported_child_modules": 82,
+  "errors": {},
+  "installed_packages": {
+    "pydantic": "2.13.4",
+    "httpx": "0.28.1",
+    "cryptography": "46.0.4",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "threadpoolctl": "3.6.0",
+    "pytest": "9.0.2",
+    "setuptools": "82.0.1",
+    "wheel": null,
+    "build": null,
+    "pyinstaller": null,
+    "ruff": null,
+    "keyring": null,
+    "pyarrow": null,
+    "uv": "0.10.0"
+  }
+}

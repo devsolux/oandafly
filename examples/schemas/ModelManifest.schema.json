@@ -1,0 +1,213 @@
+{
+  "$defs": {
+    "KernelConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "dt_ms": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Dt Ms",
+          "type": "number"
+        },
+        "neural_warmup_bars": {
+          "default": 10,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Neural Warmup Bars",
+          "type": "integer"
+        },
+        "recurrent_gain": {
+          "default": 0.95,
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Recurrent Gain",
+          "type": "number"
+        },
+        "specification": {
+          "const": "MALECNS_FULL_RATE_V1",
+          "default": "MALECNS_FULL_RATE_V1",
+          "title": "Specification",
+          "type": "string"
+        },
+        "steps_per_bar": {
+          "default": 20,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Steps Per Bar",
+          "type": "integer"
+        },
+        "tau_ms": {
+          "default": 20,
+          "exclusiveMinimum": 0,
+          "maximum": 1000,
+          "title": "Tau Ms",
+          "type": "number"
+        }
+      },
+      "title": "KernelConfig",
+      "type": "object"
+    },
+    "NumericFile": {
+      "additionalProperties": false,
+      "properties": {
+        "dtype": {
+          "title": "Dtype",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "shape": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Shape",
+          "type": "array"
+        },
+        "size": {
+          "maximum": 4294967296,
+          "minimum": 1,
+          "title": "Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sha256",
+        "size",
+        "dtype",
+        "shape"
+      ],
+      "title": "NumericFile",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allocation_scale": {
+      "exclusiveMinimum": 0,
+      "title": "Allocation Scale",
+      "type": "number"
+    },
+    "confidence_scale": {
+      "exclusiveMinimum": 0,
+      "title": "Confidence Scale",
+      "type": "number"
+    },
+    "family": {
+      "const": "MALECNS_FULL_RATE_V1",
+      "default": "MALECNS_FULL_RATE_V1",
+      "title": "Family",
+      "type": "string"
+    },
+    "feature_names": {
+      "default": [
+        "return_1",
+        "return_2",
+        "return_4",
+        "return_8",
+        "return_16",
+        "volatility_16",
+        "range_fraction",
+        "spread_fraction",
+        "volume_relative",
+        "hour_sin",
+        "hour_cos",
+        "bias"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Feature Names",
+      "type": "array"
+    },
+    "feature_schema": {
+      "const": "oandafly.market-encoder.1",
+      "default": "oandafly.market-encoder.1",
+      "title": "Feature Schema",
+      "type": "string"
+    },
+    "files": {
+      "additionalProperties": {
+        "$ref": "#/$defs/NumericFile"
+      },
+      "title": "Files",
+      "type": "object"
+    },
+    "format": {
+      "const": "oandafly.model.1",
+      "default": "oandafly.model.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "graph_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Graph Sha256",
+      "type": "string"
+    },
+    "kernel": {
+      "$ref": "#/$defs/KernelConfig"
+    },
+    "minimum_net_utility": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Minimum Net Utility",
+      "type": "number"
+    },
+    "neurons": {
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Neurons",
+      "type": "integer"
+    },
+    "output_names": {
+      "default": [
+        "LONG_NET_UTILITY",
+        "SHORT_NET_UTILITY"
+      ],
+      "items": {
+        "enum": [
+          "LONG_NET_UTILITY",
+          "SHORT_NET_UTILITY"
+        ],
+        "type": "string"
+      },
+      "title": "Output Names",
+      "type": "array"
+    },
+    "seed": {
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "state_policy": {
+      "const": "BOUNDED_CAUSAL_WINDOW_V1",
+      "default": "BOUNDED_CAUSAL_WINDOW_V1",
+      "title": "State Policy",
+      "type": "string"
+    },
+    "training_receipt_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Training Receipt Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "graph_sha256",
+    "neurons",
+    "kernel",
+    "confidence_scale",
+    "allocation_scale",
+    "training_receipt_sha256",
+    "seed",
+    "files"
+  ],
+  "title": "ModelManifest",
+  "type": "object"
+}

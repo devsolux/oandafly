@@ -1,0 +1,14 @@
+{
+  "oandafly-1.0.0-rechecked.zip": {
+    "bytes": 2957126,
+    "sha256": "5d2bb00a62dc83ae2f3b386334f882349ff2c5c4f37b6a251c1aa58eb13f3fd1"
+  },
+  "dev(9).sh": {
+    "bytes": 18897,
+    "sha256": "3b8e6bfc4c8e85c95eba3a06d21a7aa2c4d4ce9f1f0184b3c0bfdc883feb16a1"
+  },
+  "packaging(1).zip": {
+    "bytes": 1347511,
+    "sha256": "03b2fb47bb5fab24ab04ca91f8a42a0677c521322542dc28432c118d671300cd"
+  }
+}

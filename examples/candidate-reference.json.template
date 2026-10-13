@@ -1,0 +1,6 @@
+{
+  "deployment_document": "<reviewed deployment_document>",
+  "format": "oandafly.candidate-reference.1",
+  "model_directory": "<reviewed model_directory>",
+  "validation_document": "<reviewed validation_document>"
+}

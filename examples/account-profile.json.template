@@ -1,0 +1,35 @@
+{
+  "account_ids": [
+    "<reviewed account_ids>"
+  ],
+  "api_binding": "<select api_binding: V20, PAPER>",
+  "authority_id": "<reviewed authority_id>",
+  "broker_entity": "<reviewed broker_entity>",
+  "environment": "<select environment: LIVE, SANDBOX>",
+  "evidence_sha256": "<reviewed evidence_sha256>",
+  "expires_at": "<reviewed expires_at>",
+  "home_currency": "<reviewed home_currency>",
+  "instrument_rules": [
+    {
+      "instrument": {
+        "display_precision": 5,
+        "instrument_type": "CURRENCY",
+        "margin_rate": "0.05",
+        "maximum_order_units": "100000000",
+        "minimum_trade_size": "1",
+        "name": "<reviewed name>",
+        "pip_location": -4,
+        "trade_units_precision": 0
+      },
+      "maximum_leverage": "<reviewed maximum_leverage>"
+    }
+  ],
+  "legal_product": "<select legal_product: NON_CFD_FX, CFD_FX, SYNTHETIC_FX>",
+  "negative_balance_protection": "<reviewed negative_balance_protection>",
+  "profile_id": "<reviewed profile_id>",
+  "region": "DE",
+  "retail": true,
+  "verification_issuer": "<reviewed verification_issuer>",
+  "verified_at": "<reviewed verified_at>",
+  "version": "<reviewed version>"
+}

@@ -1,0 +1,13 @@
+{
+  "format": "oandafly.release-tests.1",
+  "testpaths": ["tests"],
+  "plugins": ["pytest_asyncio.plugin"],
+  "platform_exclusions": {
+    "linux_containment": ["macos-arm64", "windows-amd64"],
+    "posix_only": ["windows-amd64"]
+  },
+  "required_runtime_checks": ["python_3_13", "sqlite_3_51_3", "tk_window", "native_containment"],
+  "unexpected_skips": "fail",
+  "xfail": "fail",
+  "deselection": "only_explicit_platform_markers"
+}

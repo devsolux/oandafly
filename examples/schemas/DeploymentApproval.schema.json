@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "account_id": {
+      "title": "Account Id",
+      "type": "string"
+    },
+    "artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "environment": {
+      "enum": [
+        "SANDBOX",
+        "LIVE"
+      ],
+      "title": "Environment",
+      "type": "string"
+    },
+    "generation": {
+      "minimum": 1,
+      "title": "Generation",
+      "type": "integer"
+    },
+    "grant_id": {
+      "title": "Grant Id",
+      "type": "string"
+    },
+    "instruments": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "title": "Instruments",
+      "type": "array"
+    },
+    "live_qualification_report_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Live Qualification Report Sha256"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_until": {
+      "format": "date-time",
+      "title": "Valid Until",
+      "type": "string"
+    },
+    "validation_document_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Validation Document Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "artifact_sha256",
+    "validation_document_sha256",
+    "environment",
+    "account_id",
+    "grant_id",
+    "instruments",
+    "generation",
+    "valid_from",
+    "valid_until"
+  ],
+  "title": "DeploymentApproval",
+  "type": "object"
+}

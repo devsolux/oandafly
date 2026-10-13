@@ -1,0 +1,15 @@
+include README.md NOTICE.md CHANGELOG.md LICENSE Makefile pyproject.toml MANIFEST.in
+include .gitignore .gitattributes dev.sh dev.ps1 .python-version requirements-build.in PACKAGE_MANIFEST.json
+include uv.lock requirements.lock requirements-dev.lock requirements-build.lock
+recursive-include .github *.yml *.yaml
+recursive-include src *.py py.typed *.json *.png *.ico *.icns
+recursive-include docs *.md *.json *.xml *.txt *.png
+recursive-include examples *.json *.template *.md
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include deploy *.md *.template *.service
+prune build
+prune dist
+global-exclude __pycache__ *.py[cod]
+
+recursive-include packaging *.py *.spec *.json *.md *.png *.txt *.sh *.ps1 *.template *.plist *.entitlements *.swift *.m *.mm *.c *.h *.xcscheme *.pbxproj *.xcconfig

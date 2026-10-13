@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deployment_document": {
+      "title": "Deployment Document",
+      "type": "string"
+    },
+    "format": {
+      "const": "oandafly.candidate-reference.1",
+      "default": "oandafly.candidate-reference.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "model_directory": {
+      "title": "Model Directory",
+      "type": "string"
+    },
+    "validation_document": {
+      "title": "Validation Document",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model_directory",
+    "validation_document",
+    "deployment_document"
+  ],
+  "title": "CandidateReference",
+  "type": "object"
+}

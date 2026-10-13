@@ -1,0 +1,16 @@
+{
+  "format": "oandafly.macos-profile.1",
+  "application_minimum": "26.0",
+  "deployment_target": "26.0",
+  "architecture": "arm64",
+  "reference_hardware": "Apple M4",
+  "xcode_version": "27.0",
+  "xcode_minimum_host": "26.6",
+  "clang_product": "Apple clang",
+  "clang_version": "21.0.0",
+  "clang_build": "clang-2100.3.34.2",
+  "sdk_version": "27.0",
+  "sdk_build": "26A425",
+  "requested_sdk_label": "27.0 (26A425)",
+  "host_requirements_source": "https://developer.apple.com/support/xcode/"
+}

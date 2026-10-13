@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "commission_round_trip_fraction": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Commission Round Trip Fraction"
+    },
+    "convention": {
+      "const": "NEXT_BAR_OPEN_TO_HORIZON_CLOSE_WITH_EXPLICIT_COST_PROXY",
+      "default": "NEXT_BAR_OPEN_TO_HORIZON_CLOSE_WITH_EXPLICIT_COST_PROXY",
+      "title": "Convention",
+      "type": "string"
+    },
+    "evidence_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evidence Sha256",
+      "type": "string"
+    },
+    "financing_long_per_day_fraction": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Financing Long Per Day Fraction"
+    },
+    "financing_short_per_day_fraction": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Financing Short Per Day Fraction"
+    },
+    "format": {
+      "const": "oandafly.utility-costs.1",
+      "default": "oandafly.utility-costs.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "slippage_per_side_fraction": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Slippage Per Side Fraction"
+    }
+  },
+  "required": [
+    "evidence_sha256",
+    "commission_round_trip_fraction",
+    "slippage_per_side_fraction",
+    "financing_long_per_day_fraction",
+    "financing_short_per_day_fraction"
+  ],
+  "title": "CostAssumptions",
+  "type": "object"
+}

@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "target": "windows-amd64",
+  "native_host": "linux-amd64",
+  "host_matches": false,
+  "kind": "LOCAL_CANDIDATE",
+  "spec": "packaging/oandafly.spec",
+  "outputs": [
+    "oandafly.exe",
+    "oandafly-cli.exe"
+  ],
+  "archive_suffix": ".zip",
+  "requirements": [
+    "native host",
+    "Python 3.13",
+    "reviewed locked dependencies",
+    "native Tk display",
+    "source/resource parity",
+    "desktop tests without skips",
+    "visible compiled GUI with clean exit"
+  ],
+  "release_signing_inputs": [
+    "WIN_SIGN_CERT_SHA1",
+    "WIN_TIMESTAMP_URL",
+    "SIGNTOOL_EXE (optional path)"
+  ],
+  "built": false,
+  "native_trading_qualified": false
+}

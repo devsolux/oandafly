@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "sdist",
+    "archive": "oandafly-1.0.0.tar.gz",
+    "expected_files": 200,
+    "missing": [],
+    "changed": [],
+    "unexpected_runtime_files": [],
+    "passed": true
+  },
+  {
+    "kind": "wheel",
+    "archive": "oandafly-1.0.0-py3-none-any.whl",
+    "expected_files": 92,
+    "missing": [],
+    "changed": [],
+    "unexpected_runtime_files": [],
+    "passed": true
+  }
+]

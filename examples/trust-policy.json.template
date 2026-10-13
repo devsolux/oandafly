@@ -1,0 +1,14 @@
+{
+  "format": "oandafly.trust.1",
+  "keys": [
+    {
+      "key_id": "<reviewed key_id>",
+      "public_key_hex": "<reviewed public_key_hex>",
+      "role": "<select role: ACCOUNT_ELIGIBILITY, TRADING_AUTHORIZATION, DATASET_REVIEW, MODEL_VALIDATION, DEPLOYMENT>",
+      "valid_from": "<reviewed valid_from>",
+      "valid_until": "<reviewed valid_until>"
+    }
+  ],
+  "revoked_document_sha256": [],
+  "revoked_key_ids": []
+}

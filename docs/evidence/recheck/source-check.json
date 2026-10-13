@@ -1,0 +1,19 @@
+{
+  "application_version": "1.0.0",
+  "broken_local_markdown_links": [],
+  "dependency_resolution_verified": false,
+  "issues": [],
+  "manifest_checked": false,
+  "missing_internal_imports": [],
+  "missing_release_dependency_files": [
+    "uv.lock",
+    "requirements.lock",
+    "requirements-dev.lock",
+    "requirements-build.lock"
+  ],
+  "missing_required_source_files": [],
+  "native_trading_qualified": false,
+  "python_modules": 78,
+  "selected_files_excluding_manifest": 199,
+  "source_check_passed": true
+}

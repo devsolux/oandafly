@@ -1,0 +1,34 @@
+{
+  "format": "oandafly.worker.1",
+  "application_version": "1.0.0",
+  "authority_id": "shadow-main",
+  "environment": "SANDBOX",
+  "mode": "SHADOW",
+  "account_id": "<actual-practice-account-id>",
+  "instruments": [
+    "EUR_USD"
+  ],
+  "granularity": "M5",
+  "vault_backend": "SYSTEMD",
+  "observation_credential": {
+    "credential_id": "<new-observation-reference-uuid>",
+    "authority_id": "shadow-main",
+    "environment": "SANDBOX",
+    "purpose": "V20_OBSERVATION",
+    "account_ids": [
+      "<actual-practice-account-id>"
+    ],
+    "expires_at": "<reviewed-future-UTC-time>"
+  },
+  "execution_credential": null,
+  "profile": "/absolute/private/actual-profile.json",
+  "eligibility_approval": "/absolute/private/eligibility.signed.json",
+  "trust_policy": "/absolute/private/trust.json",
+  "graph_directory": "/absolute/private/graphs/male-cns-v1",
+  "model_directory": "/absolute/private/qualified-model",
+  "dataset_review": "/absolute/private/dataset-review.signed.json",
+  "model_validation": null,
+  "deployment_approval": null,
+  "authorization_grant": null,
+  "registry_directory": null
+}

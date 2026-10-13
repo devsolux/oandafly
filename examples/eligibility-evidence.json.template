@@ -1,0 +1,7 @@
+{
+  "eligible_v20_fx_account": "<reviewed eligible_v20_fx_account>",
+  "expires_at": "<reviewed expires_at>",
+  "profile_sha256": "<reviewed profile_sha256>",
+  "reviewed_at": "<reviewed reviewed_at>",
+  "underlying_evidence_sha256": "<reviewed underlying_evidence_sha256>"
+}

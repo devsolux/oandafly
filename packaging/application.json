@@ -1,0 +1,23 @@
+{
+  "name": "oandafly",
+  "display_name": "Oandafly",
+  "version": "1.0.0",
+  "identifier": "com.devsolux.oandafly",
+  "entrypoint": "oandafly.desktop:main",
+  "default_command": "desktop",
+  "default_armed": false,
+  "automatic_worker_start": false,
+  "targets": [
+    "macos-arm64",
+    "windows-amd64",
+    "linux-amd64"
+  ],
+  "minimum_os": {
+    "macos-arm64": "26.0",
+    "windows-amd64": "Windows 11 (build 22000)",
+    "linux-amd64": "glibc 2.35"
+  },
+  "real_broker_execution_qualified": false,
+  "scientific_pipeline_qualified": false,
+  "signed_native_distribution_qualified": false
+}

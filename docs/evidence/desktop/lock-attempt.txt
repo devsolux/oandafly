@@ -1,0 +1,7 @@
+Using CPython 3.13.5 interpreter at: /opt/pyvenv/bin/python
+error: Failed to fetch: `https://pypi.org/simple/pytest-asyncio/`
+  Caused by: error sending request for url (https://pypi.org/simple/pytest-asyncio/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: Temporary failure in name resolution
+{"status": "LOCKS_UNRESOLVED", "error_type": "CalledProcessError", "message": "Command '['/opt/pyvenv/bin/uv', '--no-config', '--no-python-downloads', 'lock', '--python', '/opt/pyvenv/bin/python', '--default-index', 'https://pypi.org/simple']' returned non-zero exit status 2.", "no_placeholder_locks_created": true}

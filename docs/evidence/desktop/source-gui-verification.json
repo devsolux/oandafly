@@ -1,0 +1,34 @@
+{
+  "format": "oandafly.desktop-verification.1",
+  "passed": true,
+  "frozen_required": false,
+  "source_smoke": true,
+  "native_trading_qualified": false,
+  "startup_seconds": 0.7244965360000606,
+  "exit_code": 0,
+  "window": {
+    "visible": true,
+    "method": "X11_XWININFO",
+    "window_id": 2097155,
+    "scope": "Server visibility of child-reported ID; not process-security attestation"
+  },
+  "heartbeat": {
+    "completed": true,
+    "elapsed_seconds": 3.1776088270000855,
+    "format": "oandafly.gui-heartbeat.1",
+    "frozen": false,
+    "height": 760,
+    "held_after_ack_seconds": 3.0198143570000866,
+    "main_thread": true,
+    "mapped": true,
+    "no_worker_access": true,
+    "nonce": "80677648a84efcf7fba15b24e11b6a592aaf35251f65893a46696e2655083450",
+    "pid": 1356,
+    "python": "3.13.5",
+    "tcl_tk": "8.6.16",
+    "ticks": 32,
+    "version": "1.0.0",
+    "width": 1080,
+    "window_id": 2097155
+  }
+}

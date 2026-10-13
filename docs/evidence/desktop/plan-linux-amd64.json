@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "target": "linux-amd64",
+  "native_host": "linux-amd64",
+  "host_matches": true,
+  "kind": "LOCAL_CANDIDATE",
+  "spec": "packaging/oandafly.spec",
+  "outputs": [
+    "oandafly",
+    "oandafly-cli"
+  ],
+  "archive_suffix": ".tar.gz",
+  "requirements": [
+    "native host",
+    "Python 3.13",
+    "reviewed locked dependencies",
+    "native Tk display",
+    "source/resource parity",
+    "desktop tests without skips",
+    "visible compiled GUI with clean exit"
+  ],
+  "release_signing_inputs": [],
+  "built": false,
+  "native_trading_qualified": false
+}

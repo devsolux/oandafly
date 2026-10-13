@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "completeness": {
+      "const": "ALL_CURATED_NEURONS_ALL_INTERNAL_PUBLISHED_EDGES",
+      "title": "Completeness",
+      "type": "string"
+    },
+    "curated_neurons": {
+      "minimum": 1,
+      "title": "Curated Neurons",
+      "type": "integer"
+    },
+    "excluded_endpoint_rows": {
+      "minimum": 0,
+      "title": "Excluded Endpoint Rows",
+      "type": "integer"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "internal_connections": {
+      "minimum": 1,
+      "title": "Internal Connections",
+      "type": "integer"
+    },
+    "internal_contacts": {
+      "minimum": 1,
+      "title": "Internal Contacts",
+      "type": "integer"
+    },
+    "release": {
+      "title": "Release",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "sign_assumptions_report_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sign Assumptions Report Sha256",
+      "type": "string"
+    },
+    "source_sha256": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Sha256",
+      "type": "object"
+    }
+  },
+  "required": [
+    "artifact_sha256",
+    "release",
+    "source_sha256",
+    "curated_neurons",
+    "internal_connections",
+    "internal_contacts",
+    "excluded_endpoint_rows",
+    "completeness",
+    "sign_assumptions_report_sha256",
+    "reviewed_at",
+    "expires_at"
+  ],
+  "title": "DatasetReview",
+  "type": "object"
+}

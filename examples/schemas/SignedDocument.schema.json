@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "oandafly.approval.1",
+      "default": "oandafly.approval.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "key_id": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+      "title": "Key Id",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "role": {
+      "enum": [
+        "ACCOUNT_ELIGIBILITY",
+        "TRADING_AUTHORIZATION",
+        "DATASET_REVIEW",
+        "MODEL_VALIDATION",
+        "DEPLOYMENT"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "signature_b64": {
+      "maxLength": 100,
+      "minLength": 80,
+      "title": "Signature B64",
+      "type": "string"
+    }
+  },
+  "required": [
+    "key_id",
+    "role",
+    "payload",
+    "signature_b64"
+  ],
+  "title": "SignedDocument",
+  "type": "object"
+}

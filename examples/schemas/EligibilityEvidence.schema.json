@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "eligible_v20_fx_account": {
+      "title": "Eligible V20 Fx Account",
+      "type": "boolean"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "underlying_evidence_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Underlying Evidence Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_sha256",
+    "underlying_evidence_sha256",
+    "eligible_v20_fx_account",
+    "reviewed_at",
+    "expires_at"
+  ],
+  "title": "EligibilityEvidence",
+  "type": "object"
+}

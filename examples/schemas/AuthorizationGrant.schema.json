@@ -1,0 +1,303 @@
+{
+  "$defs": {
+    "RiskLimits": {
+      "additionalProperties": false,
+      "description": "Operator-approved bounds, never parameters selected by the neural model.",
+      "properties": {
+        "gap_buffer_pips": {
+          "anyOf": [
+            {
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "10",
+          "title": "Gap Buffer Pips"
+        },
+        "margin_buffer_fraction": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.25",
+          "title": "Margin Buffer Fraction"
+        },
+        "maximum_account_age_seconds": {
+          "default": 10,
+          "maximum": 30,
+          "minimum": 1,
+          "title": "Maximum Account Age Seconds",
+          "type": "integer"
+        },
+        "maximum_currency_fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 5.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "1",
+          "title": "Maximum Currency Fraction"
+        },
+        "maximum_daily_loss_fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 0.1,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.01",
+          "title": "Maximum Daily Loss Fraction"
+        },
+        "maximum_drawdown_fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 0.2,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.03",
+          "title": "Maximum Drawdown Fraction"
+        },
+        "maximum_entry_loss_fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 0.02,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.0025",
+          "title": "Maximum Entry Loss Fraction"
+        },
+        "maximum_gross_leverage": {
+          "anyOf": [
+            {
+              "maximum": 30.0,
+              "minimum": 1.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "2",
+          "title": "Maximum Gross Leverage"
+        },
+        "maximum_instrument_units": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "1000",
+          "title": "Maximum Instrument Units"
+        },
+        "maximum_quote_age_seconds": {
+          "default": 5,
+          "maximum": 30,
+          "minimum": 1,
+          "title": "Maximum Quote Age Seconds",
+          "type": "integer"
+        },
+        "maximum_spread_pips": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 100.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "3",
+          "title": "Maximum Spread Pips"
+        },
+        "minimum_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.6",
+          "title": "Minimum Confidence"
+        },
+        "slippage_bound_pips": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 100.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "2",
+          "title": "Slippage Bound Pips"
+        },
+        "stop_distance_pips": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "maximum": 1000.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "30",
+          "title": "Stop Distance Pips"
+        }
+      },
+      "title": "RiskLimits",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "account_id": {
+      "pattern": "^[A-Za-z0-9_-]{1,128}$",
+      "title": "Account Id",
+      "type": "string"
+    },
+    "allow_automatic_promotion": {
+      "default": false,
+      "title": "Allow Automatic Promotion",
+      "type": "boolean"
+    },
+    "allow_unattended_resume": {
+      "default": false,
+      "title": "Allow Unattended Resume",
+      "type": "boolean"
+    },
+    "authority_id": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+      "title": "Authority Id",
+      "type": "string"
+    },
+    "environment": {
+      "enum": [
+        "SANDBOX",
+        "LIVE"
+      ],
+      "title": "Environment",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "grant_id": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+      "title": "Grant Id",
+      "type": "string"
+    },
+    "instruments": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "title": "Instruments",
+      "type": "array"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "title": "Issued At",
+      "type": "string"
+    },
+    "limits": {
+      "$ref": "#/$defs/RiskLimits"
+    },
+    "mode": {
+      "enum": [
+        "PRACTICE",
+        "LIVE"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "model_family": {
+      "const": "MALECNS_FULL_RATE_V1",
+      "default": "MALECNS_FULL_RATE_V1",
+      "title": "Model Family",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "recovery_until": {
+      "format": "date-time",
+      "title": "Recovery Until",
+      "type": "string"
+    }
+  },
+  "required": [
+    "grant_id",
+    "authority_id",
+    "environment",
+    "mode",
+    "account_id",
+    "profile_sha256",
+    "instruments",
+    "limits",
+    "issued_at",
+    "expires_at",
+    "recovery_until"
+  ],
+  "title": "AuthorizationGrant",
+  "type": "object"
+}

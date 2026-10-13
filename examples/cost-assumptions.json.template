@@ -1,0 +1,9 @@
+{
+  "commission_round_trip_fraction": "<reviewed commission_round_trip_fraction>",
+  "convention": "NEXT_BAR_OPEN_TO_HORIZON_CLOSE_WITH_EXPLICIT_COST_PROXY",
+  "evidence_sha256": "<reviewed evidence_sha256>",
+  "financing_long_per_day_fraction": "<reviewed financing_long_per_day_fraction>",
+  "financing_short_per_day_fraction": "<reviewed financing_short_per_day_fraction>",
+  "format": "oandafly.utility-costs.1",
+  "slippage_per_side_fraction": "<reviewed slippage_per_side_fraction>"
+}

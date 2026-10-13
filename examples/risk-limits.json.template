@@ -1,0 +1,16 @@
+{
+  "gap_buffer_pips": "<operator-approved gap_buffer_pips>",
+  "margin_buffer_fraction": "<operator-approved margin_buffer_fraction>",
+  "maximum_account_age_seconds": "<operator-approved maximum_account_age_seconds>",
+  "maximum_currency_fraction": "<operator-approved maximum_currency_fraction>",
+  "maximum_daily_loss_fraction": "<operator-approved maximum_daily_loss_fraction>",
+  "maximum_drawdown_fraction": "<operator-approved maximum_drawdown_fraction>",
+  "maximum_entry_loss_fraction": "<operator-approved maximum_entry_loss_fraction>",
+  "maximum_gross_leverage": "<operator-approved maximum_gross_leverage>",
+  "maximum_instrument_units": "<operator-approved maximum_instrument_units>",
+  "maximum_quote_age_seconds": "<operator-approved maximum_quote_age_seconds>",
+  "maximum_spread_pips": "<operator-approved maximum_spread_pips>",
+  "minimum_confidence": "<operator-approved minimum_confidence>",
+  "slippage_bound_pips": "<operator-approved slippage_bound_pips>",
+  "stop_distance_pips": "<operator-approved stop_distance_pips>"
+}

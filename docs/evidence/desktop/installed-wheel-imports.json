@@ -1,0 +1,8 @@
+{
+  "scope": "wheel installed --no-deps in an isolated target; host dependencies not pinned",
+  "child_modules": 82,
+  "import_errors": {},
+  "package_path": "/mnt/data/desktop_work/installed-wheel/oandafly/__init__.py",
+  "version": "1.0.0",
+  "from_installed_wheel": true
+}

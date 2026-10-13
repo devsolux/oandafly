@@ -1,0 +1,37 @@
+{
+  "format": "oandafly.worker.1",
+  "application_version": "1.0.0",
+  "authority_id": "practice-main",
+  "environment": "SANDBOX",
+  "mode": "PRACTICE",
+  "account_id": "<actual-practice-account-id>",
+  "instruments": ["EUR_USD"],
+  "granularity": "M5",
+  "vault_backend": "SYSTEMD",
+  "observation_credential": {
+    "credential_id": "<new-observation-reference-uuid>",
+    "authority_id": "practice-main",
+    "environment": "SANDBOX",
+    "purpose": "V20_OBSERVATION",
+    "account_ids": ["<actual-practice-account-id>"],
+    "expires_at": "<reviewed-future-UTC-time>"
+  },
+  "execution_credential": {
+    "credential_id": "<different-execution-reference-uuid>",
+    "authority_id": "practice-main",
+    "environment": "SANDBOX",
+    "purpose": "V20_EXECUTION",
+    "account_ids": ["<actual-practice-account-id>"],
+    "expires_at": "<reviewed-future-UTC-time>"
+  },
+  "profile": "/absolute/private/actual-profile.json",
+  "eligibility_approval": "/absolute/private/eligibility.signed.json",
+  "trust_policy": "/absolute/private/trust.json",
+  "graph_directory": "/absolute/private/graphs/male-cns-v1",
+  "model_directory": "/absolute/private/qualified-model",
+  "dataset_review": "/absolute/private/dataset-review.signed.json",
+  "model_validation": "/absolute/private/model-validation.signed.json",
+  "deployment_approval": "/absolute/private/deployment.signed.json",
+  "authorization_grant": "/absolute/private/trading-grant.signed.json",
+  "registry_directory": null
+}

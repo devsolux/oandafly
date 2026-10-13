@@ -1,0 +1,43 @@
+{
+  "application_runtime_files": 92,
+  "application_source_modules": 78,
+  "application_version": "1.0.0",
+  "build_backend_used": {
+    "isolated": false,
+    "matches_pinned_backend": false,
+    "setuptools": "82.0.1"
+  },
+  "compiled_source_tests_scripts": true,
+  "credentials_included": false,
+  "dependency_resolution": "UNRESOLVED_NETWORK_TIMEOUT",
+  "distribution_parity": "PASS in local build; final parity record in distribution-check.json",
+  "full_functional_implementation_complete": false,
+  "full_malecns_data_included": false,
+  "full_supported_runtime_test_suite": false,
+  "native_live_tested": false,
+  "native_practice_tested": false,
+  "new_packaging_tests": 40,
+  "new_systemd_unit_activated": false,
+  "original_archive_crc": "PASS",
+  "original_inventory_hash_mismatches": [],
+  "original_inventory_hashed_files": 157,
+  "original_inventory_missing": [],
+  "production_model_included": false,
+  "recheck_date": "2026-09-22",
+  "runtime_files_changed": [],
+  "source_archive_files_including_manifest": 200,
+  "tests": {
+    "cases": 482,
+    "errors": 0,
+    "failures": 0,
+    "passed": 271,
+    "skipped": 211
+  },
+  "unresolved_release_files": [
+    "uv.lock",
+    "requirements.lock",
+    "requirements-dev.lock",
+    "requirements-build.lock"
+  ],
+  "wheel_install_scope": "Local no-dependency install; runtime dependencies from the editing environment"
+}

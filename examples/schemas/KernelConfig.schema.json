@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "dt_ms": {
+      "default": 1,
+      "exclusiveMinimum": 0,
+      "maximum": 100,
+      "title": "Dt Ms",
+      "type": "number"
+    },
+    "neural_warmup_bars": {
+      "default": 10,
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Neural Warmup Bars",
+      "type": "integer"
+    },
+    "recurrent_gain": {
+      "default": 0.95,
+      "exclusiveMaximum": 1,
+      "exclusiveMinimum": 0,
+      "title": "Recurrent Gain",
+      "type": "number"
+    },
+    "specification": {
+      "const": "MALECNS_FULL_RATE_V1",
+      "default": "MALECNS_FULL_RATE_V1",
+      "title": "Specification",
+      "type": "string"
+    },
+    "steps_per_bar": {
+      "default": 20,
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Steps Per Bar",
+      "type": "integer"
+    },
+    "tau_ms": {
+      "default": 20,
+      "exclusiveMinimum": 0,
+      "maximum": 1000,
+      "title": "Tau Ms",
+      "type": "number"
+    }
+  },
+  "title": "KernelConfig",
+  "type": "object"
+}

@@ -1,0 +1,47 @@
+# Example only. Review paths, service account, credentials and restart policy.
+# No service is installed, enabled or started by the source package.
+[Unit]
+Description=Oandafly 1.0.0 headless worker
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=oandafly
+Group=oandafly
+# The account's passwd home MUST be /var/lib/oandafly; HOME overrides are ignored.
+StateDirectory=oandafly
+StateDirectoryMode=0700
+WorkingDirectory=/opt/oandafly
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1
+# Set a reviewed private library path only when CPython dynamically requires it:
+# Environment=LD_LIBRARY_PATH=/opt/oandafly-runtime/sqlite/lib
+ExecStartPre=/opt/oandafly/.venv/bin/oandafly doctor
+# SHADOW is the default example. Configure no execution authority for this mode.
+ExecStart=/opt/oandafly/.venv/bin/oandafly run --config /var/lib/oandafly/config/worker.shadow.json
+# Derive EXACT names with `oandafly credential-name --reference ...`.
+# Never place token values in Environment=, command-line arguments or this unit.
+# LoadCredentialEncrypted=oandafly-REPLACE_WITH_OBSERVATION_NAME_HASH:/etc/credstore.encrypted/oandafly-observation.cred
+# PRACTICE/LIVE only, after separate authorization and validation:
+# LoadCredentialEncrypted=oandafly-REPLACE_WITH_EXECUTION_NAME_HASH:/etc/credstore.encrypted/oandafly-execution.cred
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=90
+KillSignal=SIGTERM
+KillMode=control-group
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/oandafly
+
+[Install]
+WantedBy=multi-user.target

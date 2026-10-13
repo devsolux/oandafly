@@ -1,0 +1,14 @@
+{
+  "account_id": "<reviewed account_id>",
+  "artifact_sha256": "<reviewed artifact_sha256>",
+  "environment": "<select environment: SANDBOX, LIVE>",
+  "generation": "<reviewed generation>",
+  "grant_id": "<reviewed grant_id>",
+  "instruments": [
+    "<reviewed instruments>"
+  ],
+  "live_qualification_report_sha256": null,
+  "valid_from": "<reviewed valid_from>",
+  "valid_until": "<reviewed valid_until>",
+  "validation_document_sha256": "<reviewed validation_document_sha256>"
+}

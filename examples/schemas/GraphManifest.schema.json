@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "NumericFile": {
+      "additionalProperties": false,
+      "properties": {
+        "dtype": {
+          "title": "Dtype",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "shape": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Shape",
+          "type": "array"
+        },
+        "size": {
+          "maximum": 4294967296,
+          "minimum": 1,
+          "title": "Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sha256",
+        "size",
+        "dtype",
+        "shape"
+      ],
+      "title": "NumericFile",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connections": {
+      "maximum": 100000000,
+      "minimum": 0,
+      "title": "Connections",
+      "type": "integer"
+    },
+    "contacts": {
+      "minimum": 0,
+      "title": "Contacts",
+      "type": "integer"
+    },
+    "excluded_endpoint_contacts": {
+      "minimum": 0,
+      "title": "Excluded Endpoint Contacts",
+      "type": "integer"
+    },
+    "excluded_endpoint_rows": {
+      "minimum": 0,
+      "title": "Excluded Endpoint Rows",
+      "type": "integer"
+    },
+    "files": {
+      "additionalProperties": {
+        "$ref": "#/$defs/NumericFile"
+      },
+      "title": "Files",
+      "type": "object"
+    },
+    "format": {
+      "const": "oandafly.graph.1",
+      "default": "oandafly.graph.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "import_spec": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Import Spec",
+      "type": "object"
+    },
+    "neurons": {
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Neurons",
+      "type": "integer"
+    },
+    "release": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Release",
+      "type": "string"
+    },
+    "scope": {
+      "enum": [
+        "FULL_DECLARED_MALECNS",
+        "TEST_FIXTURE"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "source_rows": {
+      "minimum": 0,
+      "title": "Source Rows",
+      "type": "integer"
+    },
+    "source_sha256": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Sha256",
+      "type": "object"
+    },
+    "topology": {
+      "const": "ALL_CURATED_NEURONS_ALL_INTERNAL_PUBLISHED_EDGES",
+      "default": "ALL_CURATED_NEURONS_ALL_INTERNAL_PUBLISHED_EDGES",
+      "title": "Topology",
+      "type": "string"
+    }
+  },
+  "required": [
+    "release",
+    "scope",
+    "neurons",
+    "connections",
+    "contacts",
+    "source_rows",
+    "excluded_endpoint_rows",
+    "excluded_endpoint_contacts",
+    "source_sha256",
+    "import_spec",
+    "files"
+  ],
+  "title": "GraphManifest",
+  "type": "object"
+}

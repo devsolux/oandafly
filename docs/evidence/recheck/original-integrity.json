@@ -1,0 +1,12 @@
+{
+  "inventory_entries": 157,
+  "missing": [],
+  "hash_mismatches": [],
+  "unindexed": [
+    "docs/evidence/change-inventory.json",
+    "docs/evidence/source-inventory.json"
+  ],
+  "source_modules": 78,
+  "missing_internal_imports": [],
+  "broken_local_markdown_links": []
+}

@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "TrustedSigner": {
+      "additionalProperties": false,
+      "properties": {
+        "key_id": {
+          "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+          "title": "Key Id",
+          "type": "string"
+        },
+        "public_key_hex": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Public Key Hex",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "ACCOUNT_ELIGIBILITY",
+            "TRADING_AUTHORIZATION",
+            "DATASET_REVIEW",
+            "MODEL_VALIDATION",
+            "DEPLOYMENT"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "valid_from": {
+          "format": "date-time",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key_id",
+        "role",
+        "public_key_hex",
+        "valid_from",
+        "valid_until"
+      ],
+      "title": "TrustedSigner",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "oandafly.trust.1",
+      "default": "oandafly.trust.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "keys": {
+      "items": {
+        "$ref": "#/$defs/TrustedSigner"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Keys",
+      "type": "array"
+    },
+    "revoked_document_sha256": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Revoked Document Sha256",
+      "type": "array"
+    },
+    "revoked_key_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Revoked Key Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "keys"
+  ],
+  "title": "TrustPolicy",
+  "type": "object"
+}

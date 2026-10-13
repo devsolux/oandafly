@@ -1,0 +1,80 @@
+name: Production desktop gates
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unsigned:
+    name: Full production unsigned / ${{ matrix.target }}
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macos-arm64
+            labels: [self-hosted, macOS, ARM64, oandafly-xcode27-interactive]
+          - target: windows-amd64
+            labels: [self-hosted, Windows, X64, oandafly-desktop]
+          - target: linux-amd64
+            labels: [self-hosted, Linux, X64, oandafly-desktop]
+    runs-on: ${{ matrix.labels }}
+    timeout-minutes: 90
+    env:
+      OANDAFLY_BASELINE_CONFIG: ${{ vars.OANDAFLY_BASELINE_CONFIG }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synchronize existing checked locks (POSIX)
+        if: runner.os != 'Windows'
+        run: ./dev.sh setup
+      - name: Synchronize existing checked locks (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./dev.ps1 setup
+      - name: Entire unsigned production pipeline (POSIX)
+        if: runner.os != 'Windows'
+        run: ./dev.sh build-unsigned
+      - name: Entire unsigned production pipeline (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./dev.ps1 build-unsigned
+      - name: Upload only qualified production directories
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-unsigned-${{ matrix.target }}
+          path: dist/${{ matrix.target }}/production-unsigned/
+          if-no-files-found: error
+      - name: Preserve failed-stage diagnostics separately
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-unverified-${{ matrix.target }}
+          path: |
+            build/desktop/${{ matrix.target }}/**/failed.json
+            build/desktop/${{ matrix.target }}/**/preflight.json
+            build/desktop/${{ matrix.target }}/**/logs/
+  signed-macos:
+    name: Full production Developer ID / macOS ARM64
+    if: github.ref == 'refs/heads/main'
+    environment: oandafly-production-signing
+    runs-on: [self-hosted, macOS, ARM64, oandafly-xcode27-interactive]
+    timeout-minutes: 120
+    env:
+      # Empty values deliberately use the same Bash defaults as local builds.
+      MACOS_SIGN_IDENTITY: ${{ vars.MACOS_SIGN_IDENTITY }}
+      MACOS_NOTARY_PROFILE: ${{ vars.MACOS_NOTARY_PROFILE }}
+      OANDAFLY_BASELINE_CONFIG: ${{ vars.OANDAFLY_BASELINE_CONFIG }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./dev.sh setup
+      - run: ./dev.sh build
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: production-signed-macos-arm64
+          path: dist/macos-arm64/production-signed/
+          if-no-files-found: error
+# These are operator-configured runner labels, not assertions that hosted images
+# or the containment/baseline prerequisites exist. No job has broker credentials.
+# A configured baseline transport invokes a separate interactive macOS 26.0
+# runner and returns authenticated payload-bound results; missing input blocks.

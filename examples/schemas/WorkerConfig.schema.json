@@ -1,0 +1,282 @@
+{
+  "$defs": {
+    "CredentialReference": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Account Ids",
+          "type": "array"
+        },
+        "authority_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Authority Id",
+          "type": "string"
+        },
+        "credential_id": {
+          "format": "uuid",
+          "title": "Credential Id",
+          "type": "string"
+        },
+        "entitlement_evidence_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entitlement Evidence Sha256"
+        },
+        "environment": {
+          "enum": [
+            "LIVE",
+            "SANDBOX"
+          ],
+          "title": "Environment",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "purpose": {
+          "enum": [
+            "V20_OBSERVATION",
+            "V20_EXECUTION",
+            "RATES_OBSERVATION"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        }
+      },
+      "required": [
+        "credential_id",
+        "authority_id",
+        "environment",
+        "purpose",
+        "expires_at"
+      ],
+      "title": "CredentialReference",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "account_id": {
+      "pattern": "^[A-Za-z0-9_-]{1,128}$",
+      "title": "Account Id",
+      "type": "string"
+    },
+    "application_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Application Version",
+      "type": "string"
+    },
+    "authority_id": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,128}$",
+      "title": "Authority Id",
+      "type": "string"
+    },
+    "authorization_grant": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Authorization Grant"
+    },
+    "dataset_review": {
+      "title": "Dataset Review",
+      "type": "string"
+    },
+    "deployment_approval": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deployment Approval"
+    },
+    "eligibility_approval": {
+      "title": "Eligibility Approval",
+      "type": "string"
+    },
+    "environment": {
+      "enum": [
+        "SANDBOX",
+        "LIVE"
+      ],
+      "title": "Environment",
+      "type": "string"
+    },
+    "execution_credential": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CredentialReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "format": {
+      "const": "oandafly.worker.1",
+      "default": "oandafly.worker.1",
+      "title": "Format",
+      "type": "string"
+    },
+    "granularity": {
+      "default": "M5",
+      "enum": [
+        "M1",
+        "M5",
+        "M15",
+        "M30",
+        "H1"
+      ],
+      "title": "Granularity",
+      "type": "string"
+    },
+    "graph_directory": {
+      "title": "Graph Directory",
+      "type": "string"
+    },
+    "inference_memory_gib": {
+      "default": 8,
+      "maximum": 128,
+      "minimum": 2,
+      "title": "Inference Memory Gib",
+      "type": "integer"
+    },
+    "instruments": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "title": "Instruments",
+      "type": "array"
+    },
+    "maximum_holding_bars": {
+      "default": 12,
+      "maximum": 288,
+      "minimum": 1,
+      "title": "Maximum Holding Bars",
+      "type": "integer"
+    },
+    "mode": {
+      "enum": [
+        "PRACTICE",
+        "SHADOW",
+        "LIVE"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "model_directory": {
+      "title": "Model Directory",
+      "type": "string"
+    },
+    "model_startup_timeout_seconds": {
+      "default": 120,
+      "maximum": 600,
+      "minimum": 10,
+      "title": "Model Startup Timeout Seconds",
+      "type": "integer"
+    },
+    "model_validation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Validation"
+    },
+    "observation_credential": {
+      "$ref": "#/$defs/CredentialReference"
+    },
+    "observation_interval_seconds": {
+      "default": 2,
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Observation Interval Seconds",
+      "type": "integer"
+    },
+    "profile": {
+      "title": "Profile",
+      "type": "string"
+    },
+    "reconciliation_timeout_seconds": {
+      "default": 30,
+      "maximum": 120,
+      "minimum": 5,
+      "title": "Reconciliation Timeout Seconds",
+      "type": "integer"
+    },
+    "registry_directory": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Registry Directory"
+    },
+    "trust_policy": {
+      "title": "Trust Policy",
+      "type": "string"
+    },
+    "vault_backend": {
+      "default": "NATIVE",
+      "enum": [
+        "NATIVE",
+        "SYSTEMD"
+      ],
+      "title": "Vault Backend",
+      "type": "string"
+    }
+  },
+  "required": [
+    "authority_id",
+    "environment",
+    "mode",
+    "account_id",
+    "instruments",
+    "observation_credential",
+    "profile",
+    "eligibility_approval",
+    "trust_policy",
+    "graph_directory",
+    "model_directory",
+    "dataset_review"
+  ],
+  "title": "WorkerConfig",
+  "type": "object"
+}
