@@ -80,7 +80,13 @@ Python must be exactly 3.13. Database tests need SQLite >= 3.51.3 and skip other
 - `.github/workflows/ci.yml` (`workflow_dispatch`): source checks plus the locked Linux
   qualification gate with a private SQLite build.
 - `.github/workflows/desktop.yml` (`workflow_dispatch`, published releases): native builds
-  on self-hosted runners, Sigstore cosign keyless signing, release asset upload.
+  on self-hosted runners, Sigstore cosign keyless signing, release asset upload. Native
+  jobs run only when the repository variable `OANDAFLY_NATIVE_RUNNERS` is `true`.
+- `.github/workflows/release.yml` (`workflow_dispatch`, published releases): source
+  archive, sdist and wheel built and verified on GitHub-hosted runners, signed with cosign
+  and attached to the release. A manual dispatch is a dry run that builds and signs only.
+- Release from a green `ci.yml` run on `main`; the release tag must be `v` plus the
+  `pyproject.toml` version.
 - Actions are pinned to full commit SHAs with the version in a comment. Resolve a tag with
   `gh api repos/<owner>/<repo>/commits/<tag> --jq .sha`.
 - Lint workflows with `uvx --from actionlint-py actionlint` and

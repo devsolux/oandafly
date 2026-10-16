@@ -97,3 +97,17 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
   passed both jobs with 709 tests in the locked gate.
 - Add `AGENTS.md` and `CLAUDE.md`: `main`-only branch policy, environment setup,
   pre-commit checks, code/testing conventions and CI usage for coding agents.
+
+## 1.0.0 release readiness
+
+- Add `release.yml`: on a published release (or a manual dry run) it builds the
+  deterministic source archive, sdist and wheel on GitHub-hosted runners, verifies them,
+  signs each with Sigstore cosign in a separate job and attaches them with
+  `SHA256SUMS-python`. Releases no longer depend on native self-hosted builds.
+- Make the native `desktop.yml` jobs opt-in through the `OANDAFLY_NATIVE_RUNNERS`
+  repository variable; with no registered runners a release queued them for 24 hours.
+- Rename the desktop combined checksum file to `SHA256SUMS-desktop` so the two release
+  workflows cannot overwrite each other's assets.
+- Release scope: an experimental source release. Native desktop archives, the MaleCNS
+  dataset, trained weights and broker qualification remain outside v1.0.0 as documented
+  in `docs/ENGINEERING_STATUS.md`.

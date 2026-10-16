@@ -12,7 +12,8 @@ concurrency:
 jobs:
   unsigned:
     name: Full production unsigned / ${{ matrix.target }}
-    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    # Opt-in: without registered native runners these jobs would queue for 24 hours.
+    if: vars.OANDAFLY_NATIVE_RUNNERS == 'true' && (github.event_name == 'release' || github.ref == 'refs/heads/main')
     strategy:
       fail-fast: false
       matrix:
@@ -64,7 +65,8 @@ jobs:
           if-no-files-found: ignore
   signed-macos:
     name: Full production Developer ID / macOS ARM64
-    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    # Opt-in: without registered native runners these jobs would queue for 24 hours.
+    if: vars.OANDAFLY_NATIVE_RUNNERS == 'true' && (github.event_name == 'release' || github.ref == 'refs/heads/main')
     environment: oandafly-production-signing
     runs-on: [self-hosted, macOS, ARM64, oandafly-xcode27-interactive]
     timeout-minutes: 120
@@ -137,7 +139,7 @@ jobs:
               exit 1
             fi
           fi
-          cat release-assets/*/*/SHA256SUMS | sort -k2 > release-assets/SHA256SUMS
+          cat release-assets/*/*/SHA256SUMS | sort -k2 > release-assets/SHA256SUMS-desktop
       - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
         with:
           cosign-release: v3.1.3
@@ -146,7 +148,7 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          files=(release-assets/SHA256SUMS release-assets/*/*/oandafly-*.zip release-assets/*/*/oandafly-*.tar.gz
+          files=(release-assets/SHA256SUMS-desktop release-assets/*/*/oandafly-*.zip release-assets/*/*/oandafly-*.tar.gz
                  release-assets/*/*/SHA256SUMS release-assets/*/*/build.json release-assets/*/*/provenance.json)
           for file in "${files[@]}"; do
             cosign sign-blob --yes --bundle "$file.sigstore.json" "$file"
@@ -181,13 +183,13 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          for file in signed/SHA256SUMS signed/*/*/oandafly-*.zip signed/*/*/oandafly-*.tar.gz; do
+          for file in signed/SHA256SUMS-desktop signed/*/*/oandafly-*.zip signed/*/*/oandafly-*.tar.gz; do
             if [ ! -f "$file.sigstore.json" ]; then
               echo "::error::Refusing to publish $file without its Sigstore bundle"
               exit 1
             fi
           done
-          assets=(signed/SHA256SUMS signed/SHA256SUMS.sigstore.json
+          assets=(signed/SHA256SUMS-desktop signed/SHA256SUMS-desktop.sigstore.json
                   signed/*/*/oandafly-*.zip signed/*/*/oandafly-*.zip.sigstore.json
                   signed/*/*/oandafly-*.tar.gz signed/*/*/oandafly-*.tar.gz.sigstore.json)
           gh release upload "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --clobber
@@ -195,6 +197,8 @@ jobs:
 # or the containment/baseline prerequisites exist. No job has broker credentials.
 # A configured baseline transport invokes a separate interactive macOS 26.0
 # runner and returns authenticated payload-bound results; missing input blocks.
-# Self-hosted runners need GitHub Actions runner v2.327.0+ (Node 24 actions).
+# Self-hosted runners need GitHub Actions runner v2.327.0+ (Node 24 actions). Set the
+# repository variable OANDAFLY_NATIVE_RUNNERS=true once they are registered.
+# Source/Python release assets come from release.yml (SHA256SUMS-python).
 # Release builds run on the release tag: allow tags in the signing environment's
 # deployment rules. Verify assets as documented in docs/PRODUCTION_BUILD.md.

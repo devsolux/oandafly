@@ -130,9 +130,11 @@ newer OS result can substitute for the required final-payload acceptance.
 
 CI uses explicitly configured interactive self-hosted native runners (GitHub Actions
 runner v2.327.0 or newer, for Node 24 actions). `desktop.yml` runs on manual dispatch
-from `main` and when a GitHub release is published. Release builds run on the release
-tag, so the protected signing environment's deployment rules must allow release tags as
-well as `main`. The unsigned job has no signing inputs and runs the same common gates.
+from `main` and when a GitHub release is published, but its native jobs are opt-in: set
+the repository variable `OANDAFLY_NATIVE_RUNNERS=true` once the labelled runners are
+registered, otherwise the jobs are skipped instead of queueing for 24 hours. Release
+builds run on the release tag, so the protected signing environment's deployment rules
+must allow release tags as well as `main`. The unsigned job has no signing inputs and runs the same common gates.
 Failed jobs upload diagnostics under a separate unverified label. Linux/Windows
 source/native job scopes remain explicit; neither was natively qualified on this Mac.
 Actions are pinned to full commit SHAs.
@@ -142,7 +144,11 @@ After all three unsigned targets qualify, a GitHub-hosted job verifies each buil
 checksums, `build.json` and `provenance.json` with Sigstore cosign keyless signing (the
 workflow's OIDC identity; no long-lived key). Each bundle is verified before it is kept.
 A published release receives the archives, their `.sigstore.json` bundles and a combined
-`SHA256SUMS` with its bundle. Verify a download with:
+`SHA256SUMS-desktop` with its bundle. Independently, `release.yml` builds the
+deterministic source archive, sdist and wheel on GitHub-hosted runners, verifies them
+with `scripts/check_distribution.py`, signs them the same way and attaches them with
+`SHA256SUMS-python`. Verify a download with (use `release.yml` in the identity for
+source/Python assets):
 
 ```bash
 cosign verify-blob --bundle oandafly-1.0.0-<target>-<profile>-<run>.zip.sigstore.json \

@@ -227,6 +227,18 @@ python3.13 scripts/project_integrity.py --verify-manifest
 This standard-library check needs no installation or credentials. It verifies the
 embedded per-file manifest and reports unresolved dependency locks separately.
 
+GitHub releases attach the source archive, sdist and wheel with `SHA256SUMS-python` and a
+Sigstore bundle per file, signed keyless by the release workflow:
+
+```bash
+cosign verify-blob --bundle oandafly-1.0.0-source.zip.sigstore.json \
+  --certificate-identity-regexp '^https://github\.com/devsolux/oandafly/\.github/workflows/release\.yml@refs/tags/v' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com oandafly-1.0.0-source.zip
+```
+
+Native desktop archives are attached only once their builds qualify; see the
+[production build contract](docs/PRODUCTION_BUILD.md).
+
 ## Start with non-trading checks
 
 ```bash

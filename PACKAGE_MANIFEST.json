@@ -1,6 +1,6 @@
 {
   "application_version": "1.0.0",
-  "file_count_excluding_manifest": 279,
+  "file_count_excluding_manifest": 280,
   "files": {
     ".gitattributes": {
       "bytes": 196,
@@ -15,8 +15,12 @@
       "sha256": "31613248dc7b6b661c6148e171619e07aaff3aa14dead13e47789bea0a2387a0"
     },
     ".github/workflows/desktop.yml": {
-      "bytes": 8835,
-      "sha256": "f64884aa934ef3b5d225d1ff93e5ce2169aee682d286e0bb6e12b35e4bbac46e"
+      "bytes": 9292,
+      "sha256": "6ee05bdc75fd18aa9ea7437c8e98b494892de7a79d017402cf8ecaff2537f4a3"
+    },
+    ".github/workflows/release.yml": {
+      "bytes": 5351,
+      "sha256": "8f69028e6b91025c406fd8e39d316ea62aa0319fd7260436a33dd9670e3b600d"
     },
     ".gitignore": {
       "bytes": 491,
@@ -27,12 +31,12 @@
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
     "AGENTS.md": {
-      "bytes": 4541,
-      "sha256": "3c84422bc007fbaf52f1b182f85b81224d1e82e01b4f2958c3d45e8f955c25bf"
+      "bytes": 5007,
+      "sha256": "10a81d1316ee3a11a0cf1986fbe5ee5d9b7db2742b275f2ca4f48f61e50c1a35"
     },
     "CHANGELOG.md": {
-      "bytes": 6491,
-      "sha256": "b5c7c5fa6c9ba2d14e80fdb9166275a0011661e4f16f4b17cf73c386b613cbbc"
+      "bytes": 7357,
+      "sha256": "3466d26aebbb38051174d59e55b1e4b2b361c64a315f9e07fe1782c7f39360bf"
     },
     "CLAUDE.md": {
       "bytes": 420,
@@ -55,8 +59,8 @@
       "sha256": "995465102639a0247e6e65a7b0721b52892ade05b6b4df51b5bae3bdc8223ccb"
     },
     "README.md": {
-      "bytes": 16340,
-      "sha256": "e707ee935caf304c8522ece94b11b91e51a00286664a43a2d31d921a20057259"
+      "bytes": 16930,
+      "sha256": "867043d1255011ec8bc5f5ad5d923ee38c210bdc63c72d94096d9ca2dd6b682c"
     },
     "deploy/systemd/README.md": {
       "bytes": 3087,
@@ -115,8 +119,8 @@
       "sha256": "0e9fd28ad128ad84b349aa536c5e13f03cb1e47caa07e0683be785333014be54"
     },
     "docs/PRODUCTION_BUILD.md": {
-      "bytes": 9761,
-      "sha256": "705e88d518d870aa7372793dd205b00cebaeb2f7398a1e3308b4b2d9307fd668"
+      "bytes": 10260,
+      "sha256": "ede15d7a250c5335c9ddbddb5b08ed6135de7459163f043b26c2e2092b04d676"
     },
     "docs/PROJECT_COMPLETENESS.md": {
       "bytes": 4113,
