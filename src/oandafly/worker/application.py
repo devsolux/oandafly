@@ -10,7 +10,7 @@ import asyncio
 import math
 import signal
 import time
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from uuid import NAMESPACE_URL, UUID, uuid4, uuid5
@@ -312,22 +312,35 @@ class TradingWorker:
             validation_path = self.path("model_validation") if self.config.model_validation else None
             deployment_path = self.path("deployment_approval") if self.config.deployment_approval else None
             if self.authorizer is not None:
+                configured = (model_path, validation_path, deployment_path)
+                candidates = [configured]
                 if self._selected_deployment is not None:
-                    model_path, validation_path, deployment_path = self._selected_deployment
+                    candidates = [self._selected_deployment]
                 else:
                     with self.db.read() as conn:
                         saved = conn.execute("SELECT model_path,validation_path,approval_path FROM model_deployments WHERE authority_id=?",
                                              (self.config.authority_id,)).fetchone()
                     if saved is not None:
-                        model_path, validation_path, deployment_path = (Path(value) for value in saved)
+                        persisted = tuple(Path(value) for value in saved)
+                        # Prefer the persisted champion; renewed approvals at newly configured
+                        # paths are qualified only when it no longer qualifies.
+                        candidates = [persisted] + ([configured] if configured != persisted else [])
                 grant = self.authorizer.grant()
                 if grant.instruments != self.config.instruments:
                     raise SafetyFence("Runtime and authorized instrument universes differ")
-                qualification = Qualification(graph_directory=graph_path, model_directory=model_path,
-                    verifier=self.verifier, dataset_review=self.path("dataset_review"),
-                    model_validation=validation_path, deployment_approval=deployment_path,
-                    environment=self.config.environment, account_id=self.config.account_id,
-                    grant_id=grant.grant_id, instruments=self.config.instruments)
+                failure: Exception | None = None
+                for model_path, validation_path, deployment_path in candidates:
+                    try:
+                        qualification = Qualification(graph_directory=graph_path, model_directory=model_path,
+                            verifier=self.verifier, dataset_review=self.path("dataset_review"),
+                            model_validation=validation_path, deployment_approval=deployment_path,
+                            environment=self.config.environment, account_id=self.config.account_id,
+                            grant_id=grant.grant_id, instruments=self.config.instruments)
+                        break
+                    except Exception as exc:
+                        failure = failure or exc
+                else:
+                    raise failure
             else:
                 graph = GraphManifest.model_validate_json(manifest_document(graph_path / "manifest.json"))
                 DatasetReview.from_wire(self.verifier.verify(self.path("dataset_review"), role="DATASET_REVIEW").payload).require(graph)
@@ -337,7 +350,9 @@ class TradingWorker:
                 instruments=self.config.instruments, require_containment=True,
                 startup_timeout=self.config.model_startup_timeout_seconds,
                 memory_bytes=self.config.inference_memory_gib * 1024**3)
-            if process.model_sha256 != manifest.fingerprint:
+            if process.model_sha256 != manifest.fingerprint or (qualification is not None and (
+                    manifest.fingerprint != qualification.model.fingerprint
+                    or process.graph_sha256 != qualification.graph.fingerprint)):
                 process.close()
                 raise SafetyFence("Loaded model differs from the reviewed artifact")
             if qualification is not None:
@@ -369,7 +384,8 @@ class TradingWorker:
             return
         self._promotion_attempt = time.monotonic()
         grant = self.authorizer.grant()
-        if not grant.allow_automatic_promotion or self.control()[0]:
+        # grant() verifies the signature only; an expired grant cannot authorize promotion.
+        if not grant.allow_automatic_promotion or not grant.issued_at <= utc_now() < grant.expires_at or self.control()[0]:
             return
         cut = self.synchronizer.latest
         if cut is None or cut.raw["trades"] or cut.raw["orders"] or self.pending():
@@ -404,6 +420,26 @@ class TradingWorker:
                 self._selected_deployment = None
             self.event("MODEL_PROMOTION_ATTEMPT", str(candidate.qualification.generation))
 
+    def _next_recovery_id(self, first: UUID, target_id: str) -> UUID | None:
+        """Return the next usable recovery identity, or None once a sent/unresolved action exists."""
+        with self.db.read() as conn:
+            rows = {row["action_id"]: (row["state"], row["updated_at"]) for row in conn.execute(
+                "SELECT action_id,state,updated_at FROM execution_recovery WHERE authority_id=? AND target_id=?",
+                (self.config.authority_id, target_id)).fetchall()}
+        # NOT_SENT was proven untransmitted and used its single dispatch opportunity;
+        # retry under a new deterministic identity instead of leaving the target stuck.
+        candidate, attempt, last_failure = first, 0, None
+        while rows.get(str(candidate), ("",))[0] == "NOT_SENT":
+            last_failure = rows[str(candidate)][1]
+            attempt += 1
+            candidate = uuid5(NAMESPACE_URL, f"{first}:retry:{attempt}")
+        if str(candidate) in rows:
+            return None
+        # Space retries of a persistent pre-send failure (2s, 4s, ... capped at 60s).
+        if last_failure is not None and (utc_now()-datetime.fromisoformat(last_failure)).total_seconds() < min(60, 2**attempt):
+            return None
+        return candidate
+
     async def _close_trade(self, identity: str, units: Decimal, *, reason: str, action_id: UUID | None = None) -> None:
         if self.recovery is None:
             raise SafetyFence("Native recovery capability is unavailable")
@@ -415,10 +451,9 @@ class TradingWorker:
                 await self.recovery.dispatch(pending["action_id"])
             return  # Never multiply an unresolved exact-trade close.
         snapshot = self.authority.snapshot()
-        action_id = action_id or uuid5(NAMESPACE_URL, "oandafly:protection:"+self.config.authority_id+":"+identity+":"+reason)
-        with self.db.read() as conn:
-            old = conn.execute("SELECT state FROM execution_recovery WHERE action_id=?", (str(action_id),)).fetchone()
-        if old is not None:
+        action_id = self._next_recovery_id(
+            action_id or uuid5(NAMESPACE_URL, "oandafly:protection:"+self.config.authority_id+":"+identity+":"+reason), identity)
+        if action_id is None:
             return
         record = self.recovery.prepare(context=snapshot.context, account_id=self.config.account_id,
             profile_version=self.profile.version, operation="CLOSE_TRADE", target_id=identity,
@@ -446,6 +481,9 @@ class TradingWorker:
                 observed_at=account.summary.observed_at, source_sha256=account.document.sha256, limits=grant.limits)
             loss_ok = equity.hard_fence is None
             raw = account.document.body["account"]
+            # One failing order or trade must not starve protection of the others;
+            # the first failure is re-raised after every item was attempted.
+            failure: Exception | None = None
             async with self._action_lock:
                 # Only unconditional entry orders are cancelled. Attached stop
                 # orders remain in place until the associated trade is closed.
@@ -453,24 +491,32 @@ class TradingWorker:
                     if order.get("tradeID") is None and order["type"] in {"LIMIT", "STOP", "MARKET_IF_TOUCHED"}:
                         protection_ok = False
                         if self.recovery is not None:
-                            action_id = uuid5(NAMESPACE_URL, "oandafly:cancel:"+self.config.authority_id+":"+order["id"])
-                            with self.db.read() as conn:
-                                exists = conn.execute("SELECT 1 FROM execution_recovery WHERE action_id=?", (str(action_id),)).fetchone()
-                            if exists is None:
-                                record = self.recovery.prepare(context=self.authority.snapshot().context,
-                                    account_id=self.config.account_id, profile_version=self.profile.version,
-                                    operation="CANCEL_ORDER", target_id=order["id"], action_id=action_id)
-                                await self.recovery.dispatch(record.action_id)
+                            try:
+                                action_id = self._next_recovery_id(
+                                    uuid5(NAMESPACE_URL, "oandafly:cancel:"+self.config.authority_id+":"+order["id"]), order["id"])
+                                if action_id is not None:
+                                    record = self.recovery.prepare(context=self.authority.snapshot().context,
+                                        account_id=self.config.account_id, profile_version=self.profile.version,
+                                        operation="CANCEL_ORDER", target_id=order["id"], action_id=action_id)
+                                    await self.recovery.dispatch(record.action_id)
+                            except Exception as exc:
+                                failure = failure or exc
                 for trade in raw["trades"]:
-                    stop_order = trade.get("guaranteedStopLossOrder") or trade.get("stopLossOrder")
-                    stop_ok = (isinstance(stop_order, dict) and stop_order.get("state") == "PENDING"
-                               and money(stop_order.get("price", "0")) > 0)
-                    age = (utc_now()-native_time(trade["openTime"])).total_seconds()
-                    too_old = age > GRANULARITIES[self.config.granularity] * self.config.maximum_holding_bars
-                    if not stop_ok or not loss_ok or flatten or too_old:
+                    try:
+                        stop_order = trade.get("guaranteedStopLossOrder") or trade.get("stopLossOrder")
+                        stop_ok = (isinstance(stop_order, dict) and stop_order.get("state") == "PENDING"
+                                   and money(stop_order.get("price", "0")) > 0)
+                        age = (utc_now()-native_time(trade["openTime"])).total_seconds()
+                        too_old = age > GRANULARITIES[self.config.granularity] * self.config.maximum_holding_bars
+                        if not stop_ok or not loss_ok or flatten or too_old:
+                            protection_ok = False
+                            reason = "LOSS_FENCE" if not loss_ok else "OPERATOR_FLATTEN" if flatten else "MISSING_PROTECTION" if not stop_ok else "MAXIMUM_HOLDING_TIME"
+                            await self._close_trade(trade["id"], money(trade["currentUnits"]), reason=reason)
+                    except Exception as exc:
                         protection_ok = False
-                        reason = "LOSS_FENCE" if not loss_ok else "OPERATOR_FLATTEN" if flatten else "MISSING_PROTECTION" if not stop_ok else "MAXIMUM_HOLDING_TIME"
-                        await self._close_trade(trade["id"], money(trade["currentUnits"]), reason=reason)
+                        failure = failure or exc
+            if failure is not None:
+                raise failure
             if flatten and not raw["trades"] and not raw["orders"] and not self.pending():
                 with self.db.transaction() as conn:
                     conn.execute("UPDATE worker_control SET flatten_requested=0 WHERE authority_id=?", (self.config.authority_id,))
@@ -494,8 +540,10 @@ class TradingWorker:
                     if not may_resume:
                         raise SafetyFence("Disarmed authority requires authorized resume")
                     self.authority.arm(snapshot.revision, str(uuid4()), self, utc_now()+timedelta(seconds=15))
-                    self._manual_resume = False
                     self._fresh_lease = False
+                # A RESUME is consumed by the first healthy cycle, even when already
+                # armed, so it cannot silently authorize a later unattended re-arm.
+                self._manual_resume = False
                 self._health_ready = True
             except Exception as exc:
                 self.block_entries(type(exc).__name__)

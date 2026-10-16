@@ -25,9 +25,13 @@ def parser() -> argparse.ArgumentParser:
                             ("validate-config", "Validate private metadata-only worker configuration")):
         child = commands.add_parser(name, help=help_text)
         child.add_argument("--config", type=Path, required=True)
-    for name in ("status", "halt", "flatten", "resume", "stop"):
-        child = commands.add_parser(name)
-        child.add_argument("--authority", required=True)
+    for name, help_text in (("status", "Read the worker's private status"),
+                            ("halt", "Queue HALT: block alpha entries; reconciliation and protective recovery continue"),
+                            ("flatten", "Queue FLATTEN: request authorized reductions toward zero; no fill guarantee"),
+                            ("resume", "Queue RESUME: recheck authorization, scope, reconciliation, protection and risk"),
+                            ("stop", "Queue STOP: stop the worker; does not guarantee closing positions")):
+        child = commands.add_parser(name, help=help_text)
+        child.add_argument("--authority", required=True, help="Exact configured authority ID")
     graph = commands.add_parser("graph-import", help="Compile all curated MaleCNS nodes and all internal published edges")
     for flag in ("neurons", "connections", "signs", "output"):
         graph.add_argument("--"+flag, type=Path, required=True)
@@ -36,8 +40,9 @@ def parser() -> argparse.ArgumentParser:
                           ("post-column", "bodyId_post"), ("weight-column", "weight"),
                           ("sign-id-column", "bodyId"), ("sign-column", "sign")):
         graph.add_argument("--"+flag, default=default)
-    for name in ("train", "train-watch"):
-        child = commands.add_parser(name, help="Produce unqualified candidates without execution credentials")
+    for name, help_text in (("train", "Produce one unqualified candidate without execution credentials"),
+                            ("train-watch", "Retrain unqualified candidates whenever the selected history window changes")):
+        child = commands.add_parser(name, help=help_text)
         for flag in ("graph", "archive", "output", "spec", "costs"):
             child.add_argument("--"+flag, type=Path, required=True)
         child.add_argument("--instrument", required=True)
@@ -108,8 +113,8 @@ def main(argv: list[str] | None = None) -> int:
             return 0 if (result["desktop"]["prerequisites_satisfied"] if args.desktop else result["runtime_prerequisites_satisfied"]) else 2
         if args.command == "run":
             from oandafly.paths import configure_runtime_storage
+            configure_runtime_storage()  # before importing runtime services, per its contract
             from oandafly.worker.application import run_worker
-            configure_runtime_storage()
             run_worker(args.config)
             return 0
         if args.command == "validate-config":

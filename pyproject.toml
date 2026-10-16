@@ -37,6 +37,7 @@ oandafly = ["py.typed", "resources/*.json", "resources/icons/*.png", "resources/
 testpaths = ["tests"]
 pythonpath = ["src", "."]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 addopts = "-ra"
 markers = ["desktop_gui: requires a real Tk display (Xvfb allowed for source smoke)", "contained: requires Linux libseccomp and process-spawn support", "sqlite_algorithm: isolated SQL algorithm test, not production WAL qualification", "linux_containment: Linux-only seccomp implementation", "posix_only: POSIX filesystem or launcher semantics"]
 

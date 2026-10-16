@@ -254,7 +254,7 @@ class Ledger:
                 payload: dict[str, object] = json.loads(row["payload"])
                 self._project(conn, environment, account_id, payload)
             conn.execute("UPDATE ledger_fences SET resolved_at=? WHERE environment=? AND account_id=? "
-                         "AND reason='NO_BASELINE' AND resolved_at IS NULL", (observed, environment, account_id))
+                         "AND reason='NO_BASELINE' AND resolved_at IS NULL", (utc_now().isoformat(), environment, account_id))
             self._audit(conn, environment, account_id, "BASELINE_ESTABLISHED", {"digest": digest, "cursor": cursor})
 
     def ingest(self, environment: str, account_id: str, transaction: Mapping[str, object],

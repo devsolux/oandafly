@@ -601,13 +601,23 @@ class NativeMutationGateway:
 
     def _mark_ambiguous(self, intent_id: str, code: str) -> OutboxRecord:
         with self.outbox.db.transaction() as connection:
+            # The gateway runs the final guard itself before send_order_bytes, so a
+            # missing invocation marker proves no native bytes were transmitted.
+            unsent = connection.execute(
+                """UPDATE outbox SET status='CANCELLED',dispatch_state='NOT_SENT',reservation_active=0,last_error=?,
+                version=version+1,updated_at=? WHERE intent_id=? AND dispatch_state='DISPATCH_STARTED'
+                AND status='PENDING_SUBMISSION' AND invocation_marker IS NULL""",
+                (code, utc_now().isoformat(), intent_id),
+            ).rowcount
             # A proven fill/create/cancel/rejection is stronger than a transport
             # timeout arriving later in another thread. Never regress its state.
             connection.execute(
                 "UPDATE outbox SET dispatch_state='UNKNOWN',last_error=?,version=version+1,updated_at=? WHERE intent_id=? AND dispatch_state='DISPATCH_STARTED' AND status='PENDING_SUBMISSION'",
                 (code, utc_now().isoformat(), intent_id),
             )
-            self.outbox.event_in(connection, intent_id, "TRANSPORT_RESULT_UNCERTAIN", detail={"code": code})
+            self.outbox.event_in(connection, intent_id,
+                                 "FAILED_BEFORE_NATIVE_INVOCATION" if unsent else "TRANSPORT_RESULT_UNCERTAIN",
+                                 detail={"code": code})
             return self.outbox.get_in(connection, intent_id)
 
     async def dispatch(self, intent_id: str) -> OutboxRecord:

@@ -57,7 +57,9 @@ class EquityLimits:
             if old is None:
                 if nav <= 0:
                     raise ValueError("Initial account equity must be positive")
-                initial, high, start, day_equity = nav, adjusted, adjusted, nav
+                # The endowment is flow-adjusted like the drawdown it bounds, so a
+                # deposit before the first observation cannot loosen the fence.
+                initial, high, start, day_equity = adjusted, adjusted, adjusted, nav
                 fence = None
             else:
                 if observed_at < datetime.fromisoformat(old["last_observed_at"]) or int(frontier) < int(old["last_frontier"]):

@@ -36,6 +36,33 @@ def test_live_grant_never_authorizes_shadow_or_another_account():
     with pytest.raises(SafetyFence):grant.require(mode=RuntimeMode.LIVE,now=now+timedelta(seconds=90),**kwargs)
     grant.require(mode=RuntimeMode.LIVE,now=now+timedelta(seconds=90),**{**kwargs,'action':'RECOVERY'})
 
+def test_rotated_grant_cannot_reuse_deployment_qualified_for_another_grant():
+    from types import SimpleNamespace
+    from oandafly.domain.context import ContextKey
+    from oandafly.domain.instruments import CurrencyInstrument
+    from oandafly.domain.policy import LeverageRule, VerifiedAccountProfile
+    from oandafly.domain.primitives import sha256_json
+    from oandafly.security.authorization import GrantAuthorizer
+    now=utc_now();account='001-001-1234567-001'
+    profile=VerifiedAccountProfile(profile_id='p',version=1,authority_id='a',environment='SANDBOX',account_ids=(account,),
+        home_currency='EUR',broker_entity='OANDA Europe',legal_product='NON_CFD_FX',region='DE',negative_balance_protection=True,
+        api_binding='V20',instrument_rules=(LeverageRule(instrument=CurrencyInstrument(name='EUR_USD'),maximum_leverage=D('20')),),
+        verification_issuer='test-only',evidence_sha256='a'*64,verified_at=now-timedelta(minutes=1),expires_at=now+timedelta(days=1))
+    issued=AuthorizationGrant(grant_id='g1',authority_id='a',environment='SANDBOX',mode='PRACTICE',account_id=account,
+        profile_sha256=sha256_json(profile),instruments=('EUR_USD',),limits=RiskLimits(),
+        issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=5),recovery_until=now+timedelta(minutes=10))
+    class Rotating(GrantAuthorizer):
+        current=issued
+        def grant(self):return self.current
+    authorizer=Rotating(verifier=None,document=None,mode=RuntimeMode.PRACTICE,account_id=account,
+        qualification=SimpleNamespace(grant_id='g1',instruments=('EUR_USD',),require=lambda:'qualified'))
+    authorizer.entry_block_reason=None
+    context=ContextKey(authority_id='a',environment='SANDBOX',product_track='TRADING',account_profile_id='p',epoch=1)
+    authorizer.require(context,profile,'ENTRY')
+    authorizer.current=issued.model_copy(update={'grant_id':'g2'})
+    with pytest.raises(SafetyFence,match='qualified deployment'):authorizer.require(context,profile,'ENTRY')
+    authorizer.require(context,profile,'RECOVERY')  # protective recovery never depends on the model scope
+
 def test_half_tick_midpoint_is_exact_without_weakening_quote_lattice():
     now=utc_now();q=Quote(instrument='EUR_USD',bid=D('1.10000'),ask=D('1.10001'),quantum=D('.00001'),
         observed_at=now,received_at=now,tradeable=True,source='PAPER')

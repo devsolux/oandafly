@@ -40,8 +40,9 @@ currently blocked by the missing macOS containment helper and 26.0 acceptance ru
 > **Source delivery, not a fully trading-qualified release.** Desktop support on
 > macOS/Windows is not production-inference containment support. Local autonomous
 > inference remains Linux/libseccomp-only; macOS/Windows worker start is fenced.
-> The actual full MaleCNS dataset, production weights, supported full-suite results,
-> native broker qualification and genuine resolved dependency locks are not invented.
+> The actual full MaleCNS dataset, production weights, supported full-suite results
+> and native broker qualification are not invented; the four resolved dependency
+> locks are included.
 > See [engineering status](docs/ENGINEERING_STATUS.md). Previous recheck reports and
 > evidence are historical; [the desktop update](docs/DESKTOP_UPDATE.md) records this delivery.
 

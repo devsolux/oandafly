@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from decimal import ROUND_UP, Decimal, Inexact, localcontext
 from typing import Any, Literal
@@ -151,7 +152,7 @@ def test_component_changes_require_versioned_upgrade_and_pragmas_are_verified(tm
 @pytest.mark.parametrize("version", [100, 101, 102, 103])
 def test_pre_release_stores_are_rejected_without_mutation(tmp_path, version):
     path = tmp_path / "old.sqlite3"
-    with sqlite3.connect(path) as connection:
+    with closing(sqlite3.connect(path)) as connection, connection:
         connection.execute("CREATE TABLE retained(value TEXT)")
         connection.execute("INSERT INTO retained VALUES('unchanged')")
         connection.execute(f"PRAGMA user_version={version}")
@@ -195,7 +196,7 @@ def test_unavailable_wal_aborts_startup_and_releases_store_owner(tmp_path, monke
         with pytest.raises(ValidationFailure, match="journal_mode"):
             supported_database(path)
     # Ownership from the failed boot was released and no migration ran.
-    with real_connect(path) as connection:
+    with closing(real_connect(path)) as connection:
         assert connection.execute("PRAGMA user_version").fetchone()[0] == 0
     repaired = supported_database(path)
     repaired.close()

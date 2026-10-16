@@ -223,6 +223,7 @@ class RecoveryRouter:
                 raise SafetyFence("recovery guard durably prevented native transmission")
             invoked = True
 
+        returned = False
         try:
             async with asyncio.timeout(max(0.001, deadline - time.monotonic())):
                 if record.operation == "CLOSE_TRADE":
@@ -231,6 +232,7 @@ class RecoveryRouter:
                     response = await self.transport.close_trade(record.account_id, record.target_id, record.units, before_send=before_send)
                 else:
                     response = await self.transport.cancel_order(record.account_id, record.target_id, before_send=before_send)
+            returned = True
             if not invoked:
                 raise TransportAmbiguous("recovery transport skipped its invocation guard")
             return self.bind_response(action_id, response)
@@ -238,9 +240,13 @@ class RecoveryRouter:
         # transport outcomes. A crashed invocation stays fenced durably.
         except (Exception, asyncio.CancelledError) as exc:
             with self.db.transaction() as connection:
+                # Without a committed invocation marker the transport failed before its
+                # final guard, so nothing was transmitted. A transport that returned
+                # without invoking the guard remains ambiguous.
                 connection.execute(
-                    "UPDATE execution_recovery SET state='UNKNOWN',updated_at=? WHERE action_id=? AND state='DISPATCH_STARTED'",
-                    (utc_now().isoformat(), action_id),
+                    "UPDATE execution_recovery SET state=CASE WHEN invocation_marker IS NULL AND ? THEN 'NOT_SENT' ELSE 'UNKNOWN' END,"
+                    "updated_at=? WHERE action_id=? AND state='DISPATCH_STARTED'",
+                    (int(not returned), utc_now().isoformat(), action_id),
                 )
             if isinstance(exc, asyncio.CancelledError):
                 raise

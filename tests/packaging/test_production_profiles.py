@@ -382,7 +382,9 @@ def test_source_cannot_impersonate_embedded_runtime():
 
 
 def test_embedded_runtime_exercises_are_credential_free_in_source_smoke(monkeypatch):
-    import keyring
+    # The probe exercises optional extras; the unlocked `.[dev]` source job lacks them.
+    keyring = pytest.importorskip('keyring')
+    pytest.importorskip('pyarrow')
     from oandafly.runtime_probe import probe
     monkeypatch.setattr(keyring,'get_password',lambda *a:pytest.fail('probe requested credentials'))
     report=probe(require_frozen=False)

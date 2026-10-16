@@ -1,5 +1,7 @@
 import ctypes.util
+import hashlib
 import json
+import os
 import sys
 import numpy as np
 import pytest
@@ -87,6 +89,17 @@ def test_causal_candidate_trains_publishes_and_replays_without_execution_authori
     assert np.isfinite(model.infer(np.ones(12,dtype=np.float32))).all()
     receipt=json.loads((root/'candidate'/'training-receipt.json').read_text())
     assert model.manifest.training_receipt_sha256==sha256_json(receipt)
+
+def test_archive_write_survives_crashed_temp_and_concurrent_publish(tmp_path,candles,monkeypatch):
+    archive=CandleArchive(tmp_path/'archive');rows=candles[:50]
+    data=b"\n".join(c.model_dump_json().encode('utf-8') for c in rows)+b"\n"
+    crashed=tmp_path/'archive'/('.'+hashlib.sha256(data).hexdigest()+'.tmp');crashed.write_bytes(b'left by a killed writer')
+    real_link=os.link
+    def racing_link(source,destination):
+        real_link(source,destination);raise FileExistsError(destination)  # another writer published first
+    monkeypatch.setattr(os,'link',racing_link)
+    path=archive.write(rows)
+    assert path.read_bytes()==data and sorted((tmp_path/'archive').glob('.*.tmp'))==[crashed]
 
 def test_archive_rolling_selection_is_exact_and_bounded(tmp_path,candles):
     archive=CandleArchive(tmp_path/'archive');archive.write(candles[:200]);archive.write(candles[180:])

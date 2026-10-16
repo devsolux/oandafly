@@ -23,8 +23,8 @@
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
     "CHANGELOG.md": {
-      "bytes": 2616,
-      "sha256": "770ca0576b0e62a3c7229e23acbedd60aed077ee2dd9a5ccb253c77d123fc131"
+      "bytes": 4041,
+      "sha256": "97cd74fd543d57ffb19ed9c5e93140fe60bac87445456814a3bdbd49647c1ed1"
     },
     "LICENSE": {
       "bytes": 1065,
@@ -43,8 +43,8 @@
       "sha256": "995465102639a0247e6e65a7b0721b52892ade05b6b4df51b5bae3bdc8223ccb"
     },
     "README.md": {
-      "bytes": 16285,
-      "sha256": "f856a7db0bdf357bfd727076fdf649fd616b09fa5dec3fe5350802c5ac71b98b"
+      "bytes": 16301,
+      "sha256": "87670d15cb59eef661de1d904fb0861e69feaf8752be977b8ba72a3033ec50c1"
     },
     "deploy/systemd/README.md": {
       "bytes": 3087,
@@ -467,8 +467,8 @@
       "sha256": "d1177bf92f12216dbb82b04920f36ae1286b29759e037eb9a61f4915cc05177e"
     },
     "pyproject.toml": {
-      "bytes": 1629,
-      "sha256": "370458314b133855df868bd381f9445e93537f04c4622ae5f1caa5dce7d0d8e0"
+      "bytes": 1677,
+      "sha256": "6795b44f19a0b52fc8c90ff05fdd65997ea2feacf9ef7b4c99a0435b03824ba7"
     },
     "requirements-build.in": {
       "bytes": 246,
@@ -587,8 +587,8 @@
       "sha256": "36442aefea9bf3369d7d64d1a8bea62680c02dcfd26b5761062d91b42660f0bc"
     },
     "src/oandafly/__main__.py": {
-      "bytes": 11879,
-      "sha256": "aa8087d3f5f15969856bf6431ae3e1a6a9133909e0164fd0b603d180c49d1487"
+      "bytes": 12608,
+      "sha256": "7f429f0ad3b09cd5f2f64f58855596d0005d1be7985eb0e2f4da73216d9de6c1"
     },
     "src/oandafly/accounts/__init__.py": {
       "bytes": 70,
@@ -695,12 +695,12 @@
       "sha256": "df592a405c050536aef1dc25c58f2a900b57445442fac94f87c045b3c1d7c863"
     },
     "src/oandafly/execution/reconciler.py": {
-      "bytes": 43079,
-      "sha256": "ffe3cacbf9c9e9678a894bf8d0902c7374fcdbf419691fd2db5826798ad18af1"
+      "bytes": 43783,
+      "sha256": "362f9e8251e9d9ec57aec22fdc307f090f9305a9faca937fb2e0c7878571554f"
     },
     "src/oandafly/execution/recovery.py": {
-      "bytes": 17745,
-      "sha256": "a2110c29806262a9fd1787abc0dbf0b036bb793b73abbb20bba1dba74f96da1f"
+      "bytes": 18144,
+      "sha256": "3c085b41ca2a5253f1696b973b3d7e2c8dddcf1dc5a90ea4d2268af1148e7d65"
     },
     "src/oandafly/execution/risk.py": {
       "bytes": 29233,
@@ -723,8 +723,8 @@
       "sha256": "394cd1df054585b550c2701f751a74bff90e3e25f81a90bd443d2d9f5940b550"
     },
     "src/oandafly/marketdata/history.py": {
-      "bytes": 2900,
-      "sha256": "a6f9694da0f272ba74424a08f41a0a0294ec7d5a81159ef9aef16993136b1581"
+      "bytes": 3303,
+      "sha256": "330c78c25a9530cce50e4cb43ff74894ffc08143827b059117d74165f33875a9"
     },
     "src/oandafly/neural/__init__.py": {
       "bytes": 45,
@@ -779,8 +779,8 @@
       "sha256": "01036c9d04f4e2b87856bbb048b051e28baddb85882dc92f61286f5504d1ce4f"
     },
     "src/oandafly/portfolio/equity.py": {
-      "bytes": 4698,
-      "sha256": "4150cd39242b6a09c3392dba72fa18159b55267b45e3d59740f3128e153e11a9"
+      "bytes": 4866,
+      "sha256": "b71110414242dc5d685d8cd1797f1f29c23b5523e3e81b594d6ed11dd14dd20c"
     },
     "src/oandafly/portfolio/planner.py": {
       "bytes": 9060,
@@ -855,8 +855,8 @@
       "sha256": "46d5a07c64539eb379a7e0e4e53de443c84d225352e8361c26f63109580706ee"
     },
     "src/oandafly/runtime_probe.py": {
-      "bytes": 3792,
-      "sha256": "852065c217bc0e9384edeb6ac8bf4afee8e02934fa82442d3db85bfccfd3740e"
+      "bytes": 3925,
+      "sha256": "f973184ac0c1a530c7bd6334c35e22dfaa2469360263f9027c3506a783f9d95e"
     },
     "src/oandafly/security/__init__.py": {
       "bytes": 83,
@@ -867,16 +867,16 @@
       "sha256": "8c5080dfdc57ad2fa52d088c4c1d406063844ab02a24878c048508622c960e4f"
     },
     "src/oandafly/security/authorization.py": {
-      "bytes": 3236,
-      "sha256": "faf220c570fe04bb862b1015a91c57216721844310fee30991f64d610e87b3ab"
+      "bytes": 3648,
+      "sha256": "031654324c176b49120b39910133425bd9bec268ccf5b762a2df4b08167d0eef"
     },
     "src/oandafly/security/credentials.py": {
       "bytes": 3751,
       "sha256": "22002f2e22be01cd6c2ddc9807b0c82a460fe58e33eabff41dab3b92ef985534"
     },
     "src/oandafly/security/linux_vault.py": {
-      "bytes": 3782,
-      "sha256": "d1b1ab1e12b3b093ebbe08b139b0218b042ffcfbca3b39bbbdce5bb0e718957c"
+      "bytes": 3893,
+      "sha256": "58d1c7fd21939aed8665c6664952ab38af462caeb62220140bb86a36d55aace7"
     },
     "src/oandafly/security/signing.py": {
       "bytes": 2170,
@@ -907,8 +907,8 @@
       "sha256": "aa12aad64cdadca5e8f94f1e816306e7af12d8beb60ccb8cbc6cc4ca215226c7"
     },
     "src/oandafly/storage/ledger.py": {
-      "bytes": 37037,
-      "sha256": "f4c774e686df1140358d276c5a97fbd1b283f7df0a80f32ca210ddc904bf84bc"
+      "bytes": 37050,
+      "sha256": "93f89036a400dd8f50c31412a7410d04ac6687cb6cb31f337fe0b59aa81accae"
     },
     "src/oandafly/storage/migrations.py": {
       "bytes": 3843,
@@ -967,8 +967,8 @@
       "sha256": "a0ae9a4da72b7bf1c36ad0c5021e64f4a1250e7eb12a14d523991c1884eb5434"
     },
     "src/oandafly/worker/application.py": {
-      "bytes": 43118,
-      "sha256": "724d407859275b35c066270393b102ef53fa3efc77a8474c7d4160f7219476b4"
+      "bytes": 46019,
+      "sha256": "67b5ce1e1b7c777bb71a16804d1709f00f0c1a4e19c849a9e3ca6e16b5b7936b"
     },
     "src/oandafly/worker/configuration.py": {
       "bytes": 4241,
@@ -1027,16 +1027,16 @@
       "sha256": "8eaccb3d2bcc45a1616b28c2c65b1696a8bda14f8e7353c91f29166b584d2fd2"
     },
     "tests/faults/test_context_outbox_product.py": {
-      "bytes": 37553,
-      "sha256": "afaeeb54deea4c22227ff0259df5abab5b51506d324be085253dc6b217146691"
+      "bytes": 43434,
+      "sha256": "171c6e3c3290121018d6af9a54147785cd179896077ac361bb7459ce31b478cf"
     },
     "tests/integration/test_paper.py": {
       "bytes": 10726,
       "sha256": "6724b447be2657a19fc6f4aa2efdb62f501e6a1b58f9871e3cb4750b7ef6bc42"
     },
     "tests/packaging/test_production_profiles.py": {
-      "bytes": 21252,
-      "sha256": "87876e5fbede6c7a726196b13df3591437ecd9a1d9b6f15d44836677c07fcd55"
+      "bytes": 21401,
+      "sha256": "e7acc71d86bea32b65c37d8466322d60158cfe4ce2c83bf66f357cffe258f538"
     },
     "tests/packaging/test_project_integrity.py": {
       "bytes": 8393,
@@ -1051,20 +1051,20 @@
       "sha256": "14914f99e16cb9ca3164a8ac60f57cd399c67ddcf52036fc560d372da45650b3"
     },
     "tests/refactor/test_contracts.py": {
-      "bytes": 6218,
-      "sha256": "aaa43e152ce8b6d44ef15e3edd36f688639f94a7fd476a640e71464d39e92ff7"
+      "bytes": 8337,
+      "sha256": "cedf95abb044894b145f14d18c17f20f783178ca25e094ffac08eefc40b56612"
     },
     "tests/refactor/test_full_cns.py": {
-      "bytes": 5157,
-      "sha256": "531fa2b53291cc074f75cd8071e9b01638cc9a1eb92863e5350c0acbd152e8c2"
+      "bytes": 5888,
+      "sha256": "d73c6cfd79d0eb3b5c69540782d34e02a756d3f3d841058ee2750c832d193901"
     },
     "tests/refactor/test_native_transport.py": {
       "bytes": 5379,
       "sha256": "dc8601b29562a650638e8b69496c36acedf298bf622a7f3eb299baf6b9ba5582"
     },
     "tests/refactor/test_sql_algorithms.py": {
-      "bytes": 7542,
-      "sha256": "b7068c5a4c6babe74a52d1603735e7c6c12c45411d91a7fced7749240c7e3954"
+      "bytes": 8320,
+      "sha256": "9341b87289a33199fab429a91a82574bf29f520da0c3456b86e50d3591f81ec7"
     },
     "tests/reports/test_history.py": {
       "bytes": 7310,
@@ -1079,8 +1079,8 @@
       "sha256": "6300e398cf98bd0c3270541825457b13ba6accfdfb32208c03bf4d2bfd1b5695"
     },
     "tests/unit/test_database.py": {
-      "bytes": 4019,
-      "sha256": "cb78919253df444650e3a9b7d25e482e47e3086a133311934b0b9a1256b3b2af"
+      "bytes": 4068,
+      "sha256": "058d8fe97337657de954aaae2c007f6fd5d52abd6d0fe455db3928805fc93cec"
     },
     "tests/unit/test_execution_risk.py": {
       "bytes": 6690,
@@ -1095,8 +1095,8 @@
       "sha256": "b26445d5ed19972f806c110f67ee55ad6fa3a2e9da682d5c98a1cca64a13421e"
     },
     "tests/unit/test_security_boundaries.py": {
-      "bytes": 8509,
-      "sha256": "a0d2d91f36b6dda7eec334545a7c1f9a4dd5824897d9d2c96188b64f4fb51186"
+      "bytes": 8570,
+      "sha256": "e03065f50f91735f251133fc9aadc94337a08c5f8a06a55d5d0dbdb9f6553071"
     },
     "uv.lock": {
       "bytes": 76156,

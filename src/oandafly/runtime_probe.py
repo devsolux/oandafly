@@ -7,6 +7,7 @@ import platform
 import sqlite3
 import sys
 import tempfile
+from contextlib import closing
 from pathlib import Path
 
 
@@ -49,7 +50,8 @@ def probe(*, require_frozen: bool = True) -> dict:
             one.rollback()
         finally:
             one.close(); two.close()
-        with sqlite3.connect(path) as reopened:
+        # sqlite3's own context manager only commits; close before the directory is removed.
+        with closing(sqlite3.connect(path)) as reopened:
             if reopened.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
                 raise ValueError("Embedded SQLite integrity check failed")
             if reopened.execute("SELECT value FROM probe").fetchall() != [(1,)]:

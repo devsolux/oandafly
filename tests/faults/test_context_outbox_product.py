@@ -496,6 +496,102 @@ def test_exact_native_recovery_closes_trade_without_reentry(harness: Harness) ->
     asyncio.run(scenario())
 
 
+def test_entry_failing_before_final_guard_is_proven_unsent(harness: Harness) -> None:
+    class VaultFailure:
+        async def prepare_order(self, account_id: str) -> None:
+            raise OSError("synthetic credential read failure before any native bytes")
+
+        async def send_order_bytes(self, account_id: str, payload: bytes) -> Mapping[str, object]:
+            raise AssertionError("an unprepared entry reached native mutation")
+
+    prepared = harness.outbox.prepare(harness.request())
+    gateway = NativeMutationGateway(harness.outbox, transport=VaultFailure(), governor=harness.governor, reducer=harness.reducer)
+    with pytest.raises(SafetyFence, match="proven unsent"):
+        asyncio.run(gateway.dispatch(prepared.intent_id))
+    result = harness.outbox.get(prepared.intent_id)
+    assert (result.status, result.dispatch_state) == (OutboxStatus.CANCELLED, DispatchState.NOT_SENT)
+    assert result.invocation_marker is None and not result.reservation_active
+    # A transient pre-send failure is not an ambiguous mutation fencing later entries.
+    harness.outbox.prepare(harness.request())
+
+
+def _open_paper_trade(harness: Harness) -> str:
+    async def scenario() -> None:
+        await harness.paper.quote(D("1.10000"), D("1.10020"))
+        prepared = harness.outbox.prepare(harness.request())
+        await NativeMutationGateway(harness.outbox, transport=harness.paper, governor=harness.governor, reducer=harness.reducer).dispatch(prepared.intent_id)
+    asyncio.run(scenario())
+    assert harness.cover_fixture_history()
+    return str(harness.outbox.open_trades(environment="SANDBOX", account_id=ACCOUNT_ID)[0]["trade_id"])
+
+
+def test_recovery_failing_before_final_guard_is_proven_unsent_and_retryable(harness: Harness) -> None:
+    trade = _open_paper_trade(harness)
+
+    class CredentialFailure:
+        async def close_trade(self, account_id: str, trade_id: str, units: Decimal, *, before_send) -> Mapping[str, object]:
+            raise OSError("synthetic credential failure before the final guard")
+
+    failing = RecoveryRouter(harness.outbox, reducer=harness.reducer, transport=CredentialFailure(), governor=harness.governor)
+    first = failing.prepare(context=harness.context, account_id=ACCOUNT_ID, profile_version=1,
+                            operation="CLOSE_TRADE", target_id=trade, units=D("100"))
+    with pytest.raises(SafetyFence, match="proven unsent"):
+        asyncio.run(failing.dispatch(first.action_id))
+    assert failing.get(first.action_id).state == "NOT_SENT"
+    assert failing.pending("fault-test") == ()
+    recovery = RecoveryRouter(harness.outbox, reducer=harness.reducer, transport=harness.paper, governor=harness.governor)
+    retry = recovery.prepare(context=harness.context, account_id=ACCOUNT_ID, profile_version=1,
+                             operation="CLOSE_TRADE", target_id=trade, units=D("100"))
+    assert asyncio.run(recovery.dispatch(retry.action_id)).state == "RESOLVED"
+
+
+def test_worker_retries_unsent_protective_close_under_new_identity(harness: Harness) -> None:
+    from types import SimpleNamespace
+    from uuid import NAMESPACE_URL, uuid5
+    from oandafly.worker.application import TradingWorker
+    trade = _open_paper_trade(harness)
+    worker = TradingWorker.__new__(TradingWorker)  # only the recovery-identity helper is exercised
+    worker.db, worker.config = harness.db, SimpleNamespace(authority_id="fault-test")
+    first = uuid5(NAMESPACE_URL, "oandafly:protection:fault-test:"+trade+":MISSING_PROTECTION")
+
+    class CredentialFailure:
+        async def close_trade(self, account_id: str, trade_id: str, units: Decimal, *, before_send) -> Mapping[str, object]:
+            raise OSError("synthetic credential failure before the final guard")
+
+    failing = RecoveryRouter(harness.outbox, reducer=harness.reducer, transport=CredentialFailure(), governor=harness.governor)
+    assert worker._next_recovery_id(first, trade) == first
+    failing.prepare(context=harness.context, account_id=ACCOUNT_ID, profile_version=1,
+                    operation="CLOSE_TRADE", target_id=trade, units=D("100"), action_id=first)
+    with pytest.raises(SafetyFence):
+        asyncio.run(failing.dispatch(str(first)))
+    assert worker._next_recovery_id(first, trade) is None  # retries of a pre-send failure back off
+    with harness.db.transaction() as connection:
+        connection.execute("UPDATE execution_recovery SET updated_at=? WHERE action_id=?",
+                           ((utc_now() - timedelta(minutes=1)).isoformat(), str(first)))
+    retry = worker._next_recovery_id(first, trade)
+    assert retry is not None and retry != first
+    recovery = RecoveryRouter(harness.outbox, reducer=harness.reducer, transport=harness.paper, governor=harness.governor)
+    recovery.prepare(context=harness.context, account_id=ACCOUNT_ID, profile_version=1,
+                     operation="CLOSE_TRADE", target_id=trade, units=D("100"), action_id=retry)
+    assert asyncio.run(recovery.dispatch(str(retry))).state == "RESOLVED"
+    assert worker._next_recovery_id(first, trade) is None  # a sent close is never multiplied
+
+
+def test_recovery_transport_skipping_its_guard_remains_ambiguous(harness: Harness) -> None:
+    trade = _open_paper_trade(harness)
+
+    class GuardSkipping:
+        async def close_trade(self, account_id: str, trade_id: str, units: Decimal, *, before_send) -> Mapping[str, object]:
+            return {}
+
+    recovery = RecoveryRouter(harness.outbox, reducer=harness.reducer, transport=GuardSkipping(), governor=harness.governor)
+    action = recovery.prepare(context=harness.context, account_id=ACCOUNT_ID, profile_version=1,
+                              operation="CLOSE_TRADE", target_id=trade, units=D("100"))
+    with pytest.raises(TransportAmbiguous):
+        asyncio.run(recovery.dispatch(action.action_id))
+    assert recovery.get(action.action_id).state == "UNKNOWN"
+
+
 def test_profile_cannot_route_to_foreign_sub_account(harness: Harness) -> None:
     with pytest.raises(SafetyFence):
         harness.outbox.prepare(harness.request(account_id="SYNTHETIC:PAPER:FOREIGN"))

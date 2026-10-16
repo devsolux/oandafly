@@ -5,6 +5,7 @@ import hashlib
 import os
 from pathlib import Path
 from typing import Iterable, Iterator
+from uuid import uuid4
 
 from oandafly.domain.errors import Conflict, SafetyFence
 from oandafly.marketdata.contracts import Candle
@@ -34,14 +35,20 @@ class CandleArchive:
             if path.read_bytes() != data:
                 raise Conflict("Content-addressed candle chunk changed")
             return path
-        temporary = self.directory / ("." + identity + ".tmp")
+        # A unique name keeps a temp file left by a crashed writer from blocking retries.
+        temporary = self.directory / ("." + identity + "." + uuid4().hex + ".tmp")
         fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         try:
             with os.fdopen(fd, "wb") as stream:
                 stream.write(data)
                 stream.flush()
                 os.fsync(stream.fileno())
-            os.link(temporary, path)
+            try:
+                os.link(temporary, path)
+            except FileExistsError:
+                # A concurrent writer published the same content address first.
+                if path.read_bytes() != data:
+                    raise Conflict("Content-addressed candle chunk changed") from None
         finally:
             temporary.unlink(missing_ok=True)
         if os.name != "nt":

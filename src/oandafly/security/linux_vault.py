@@ -66,7 +66,8 @@ class SystemdCredentialVault:
         if sys.platform != "linux":
             raise Unavailable("systemd credentials require Linux")
         directory = Path(os.environ.get("CREDENTIALS_DIRECTORY", ""))
-        if not directory.is_absolute() or not directory.is_relative_to("/run/credentials"):
+        # is_relative_to is lexical; "/run/credentials/../.." would otherwise pass.
+        if not directory.is_absolute() or ".." in directory.parts or not directory.is_relative_to("/run/credentials"):
             raise SafetyFence("No systemd-managed runtime credential directory is present")
         raw = private_document(directory / self.credential_name(reference), maximum=4096)
         try:

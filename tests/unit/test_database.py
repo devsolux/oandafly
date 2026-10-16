@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 
 import pytest
@@ -53,7 +54,7 @@ def test_verified_backup_includes_committed_wal_without_resetting_state(tmp_path
     manifest = db.backup(destination)
     assert hashlib.sha256(destination.read_bytes()).hexdigest() == manifest["sha256"]
     assert json.loads(destination.with_suffix(".sqlite3.manifest.json").read_text()) == manifest
-    with sqlite3.connect(destination) as backup:
+    with closing(sqlite3.connect(destination)) as backup:
         assert backup.execute("SELECT value FROM application_meta WHERE key='unknown_dispatch'").fetchone()[0] == "intent-123"
     with pytest.raises(FileExistsError):
         db.backup(destination)
@@ -92,5 +93,5 @@ def test_sqlite_future_schema_is_not_silently_downgraded(tmp_path: Path) -> None
     db.close()
     with pytest.raises(ValidationFailure, match="schema"):
         supported_database(path)
-    with sqlite3.connect(path) as connection:
+    with closing(sqlite3.connect(path)) as connection:
         assert connection.execute("PRAGMA user_version").fetchone()[0] == 999

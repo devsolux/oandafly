@@ -40,3 +40,24 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
 - Preserve executable shell permissions and all packaging files in source distributions.
 - Use hashed authority directory names for portable, case-distinct fresh-project storage.
 - Keep Linux-only production inference containment explicit; no macOS/Windows bypass.
+
+## 1.0.0 review fixes
+
+- Record entries and recovery actions that fail before their final guard as `NOT_SENT`
+  instead of `UNKNOWN`, so a transient credential or deadline failure no longer halts
+  trading or parks a protective close forever. Transport results without the guard stay ambiguous.
+- Retry proven-unsent protective closes and cancellations under new deterministic
+  identities with capped backoff; one failing order or trade no longer starves
+  protection of the others.
+- Fence entries when the current trading grant's ID or instruments differ from the
+  deployment's qualified scope; promotion requires a current grant; compare loaded model
+  and graph fingerprints with the qualification.
+- Consume an operator RESUME on the first healthy cycle; fall back to renewed approvals
+  at the configured paths when the persisted deployment no longer qualifies.
+- Bound the drawdown fence by the flow-adjusted endowment; stamp `NO_BASELINE` fence
+  resolution with the resolution time; candle chunk writes survive a crashed writer's
+  temp file and a concurrent identical publish.
+- Configure private runtime storage before importing the worker; reject `..` in the
+  systemd credentials directory; add CLI help for control and training commands.
+- Close SQLite connections in the runtime probe and tests, set the pytest-asyncio loop
+  scope, and skip the embedded-runtime probe test when optional extras are absent.

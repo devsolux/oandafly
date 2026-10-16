@@ -122,6 +122,14 @@ def test_decision_bar_is_consumed_once_and_cannot_reenter_after_restart(system):
     targets.suspend_all('SANDBOX',ACCOUNT,reason='RESTART')
     assert targets.current('SANDBOX',ACCOUNT,'EUR_USD') is None
 
+def test_deposit_before_first_observation_does_not_loosen_drawdown_endowment(system):
+    db,ledger,reducer=system;limits=EquityLimits(db);args=dict(environment='SANDBOX',account_id=ACCOUNT,source_sha256='c'*64,limits=RiskLimits())
+    transfer={'id':'2','accountID':ACCOUNT,'type':'TRANSFER_FUNDS','amount':'500','accountBalance':'1500','time':'2025-01-06T00:00:00Z'}
+    reducer.apply_history(environment='SANDBOX',account_id=ACCOUNT,requested_from_id='0',transactions=[transfer],last_transaction_id='2')
+    status=limits.observe(nav=D('1500'),frontier='2',observed_at=utc_now(),**args)
+    assert status.adjusted_nav==D('1000') and status.hard_fence is None
+    assert D(db.connection.execute('SELECT initial_equity FROM portfolio_equity_limits').fetchone()[0])==D('1000')
+
 def test_deposit_neither_earns_reward_nor_resets_latched_loss_fence(system):
     db,ledger,reducer=system;limits=EquityLimits(db);now=utc_now();args=dict(environment='SANDBOX',account_id=ACCOUNT,source_sha256='c'*64,limits=RiskLimits())
     assert limits.observe(nav=D('1000'),frontier='0',observed_at=now,**args).hard_fence is None

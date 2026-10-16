@@ -61,4 +61,8 @@ class GrantAuthorizer:
                 raise SafetyFence(self.entry_block_reason)
             if self.qualification is None:
                 raise SafetyFence("Full MaleCNS qualification is absent")
+            # A rotated grant must not inherit a deployment approved for another grant
+            # or instrument universe; entries stay fenced until the model is re-qualified.
+            if (grant.grant_id, tuple(grant.instruments)) != (self.qualification.grant_id, tuple(self.qualification.instruments)):
+                raise SafetyFence("Current trading grant differs from the qualified deployment scope")
             self.qualification.require()
