@@ -71,7 +71,12 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: oandafly-test-evidence
-          path: build/quality/
+          # Evidence files only; environment/ holds test scratch space with symlinks
+          # to unreadable system paths that would abort the upload.
+          path: |
+            build/quality/*/binding.json
+            build/quality/*/tests.json
+            build/quality/*/tests.json.xml
           if-no-files-found: warn
 # Neither job has broker secrets or arms trading. Actions are pinned to full commit
 # SHAs (version in the comment). The locked job verifies the four committed locks
