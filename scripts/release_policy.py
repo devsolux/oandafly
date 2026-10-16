@@ -42,6 +42,14 @@ def environment(temporary: Path, target: str) -> dict[str, str]:
     allowed = {"PATH", "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT", "DISPLAY", "WAYLAND_DISPLAY",
                "XAUTHORITY", "XDG_RUNTIME_DIR", "LANG", "LC_ALL"}
     env = {key: value for key, value in os.environ.items() if key.upper() in allowed}
+    # The documented private Linux SQLite (scripts/build_sqlite.py, docs/BOOTSTRAP.md) is
+    # selected with LD_LIBRARY_PATH; forward only absolute existing directories.
+    library_path = os.environ.get("LD_LIBRARY_PATH")
+    if target == "linux-amd64" and library_path:
+        if not all(os.path.isabs(entry) and ".." not in Path(entry).parts and os.path.isdir(entry)
+                   for entry in library_path.split(os.pathsep)):
+            raise ValueError("LD_LIBRARY_PATH may only list absolute existing directories")
+        env["LD_LIBRARY_PATH"] = library_path
     for key in ("HOME", "USERPROFILE", "TMPDIR", "TMP", "TEMP", "APPDATA", "LOCALAPPDATA",
                 "XDG_CACHE_HOME", "UV_CACHE_DIR", "PIP_CACHE_DIR", "RUFF_CACHE_DIR", "PYINSTALLER_CONFIG_DIR"):
         path = temporary / key.lower()

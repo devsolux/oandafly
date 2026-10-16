@@ -152,7 +152,11 @@ def test_shared_failure_and_cancellation_never_publish(monkeypatch, tmp_path, pr
 
 
 def test_unsigned_preflight_never_probes_signing(monkeypatch, tmp_path):
+    import sqlite3
     import scripts.build_desktop as module
+    # Host SQLite is a separate preflight gate; reach the signing boundary on every host.
+    monkeypatch.setattr(sqlite3, 'sqlite_version_info', (3, 51, 3))
+    monkeypatch.delenv('OANDAFLY_BASELINE_CONFIG', raising=False)
     monkeypatch.setenv('MACOS_SIGN_IDENTITY', 'unavailable')
     monkeypatch.setenv('MACOS_NOTARY_PROFILE', 'unavailable')
     for key in list(os.environ):
@@ -186,6 +190,20 @@ def test_child_environment_excludes_signing_broker_and_injection(monkeypatch, tm
     assert 'SYNTHETIC_SECRET' not in env.values()
     monkeypatch.setenv('PYTEST_ADDOPTS', '-k subset')
     with pytest.raises(ValueError, match='pytest'): environment(tmp_path, 'macos-arm64')
+
+
+def test_linux_child_environment_forwards_only_a_safe_private_library_path(monkeypatch, tmp_path):
+    for key in list(os.environ):
+        if key.startswith('PYTEST_'): monkeypatch.delenv(key)
+    private = tmp_path / 'sqlite' / 'lib'
+    private.mkdir(parents=True)
+    monkeypatch.setenv('LD_LIBRARY_PATH', str(private))
+    assert environment(tmp_path / 'env', 'linux-amd64')['LD_LIBRARY_PATH'] == str(private)
+    assert 'LD_LIBRARY_PATH' not in environment(tmp_path / 'env', 'macos-arm64')
+    for unsafe in ('relative/lib', str(private) + os.pathsep, str(tmp_path / 'missing'), str(private / '..' / 'lib')):
+        monkeypatch.setenv('LD_LIBRARY_PATH', unsafe)
+        with pytest.raises(ValueError, match='LD_LIBRARY_PATH'):
+            environment(tmp_path / 'env', 'linux-amd64')
 
 
 def macho(path, minimum=26, sdk=27, cpu=0x0100000C):

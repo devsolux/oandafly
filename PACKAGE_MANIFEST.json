@@ -27,8 +27,8 @@
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
     "CHANGELOG.md": {
-      "bytes": 5840,
-      "sha256": "59470d7f110216fd0b844c376ed3bc736ab9b32a0488a392327dfa17502228f1"
+      "bytes": 6100,
+      "sha256": "46e2c32c77bda88ab752dda4fa506b1674948ec379d9ea88ba7a50655695bf82"
     },
     "LICENSE": {
       "bytes": 1065,
@@ -571,8 +571,8 @@
       "sha256": "757910f15938b53d191e265890238e80b3e1f685b2f2de586a8c9dc3524d1f4b"
     },
     "scripts/release_policy.py": {
-      "bytes": 5141,
-      "sha256": "ea5bca73a8c09e8aabd36c35c193b3a4d435a8b7ad6b1f7a6f859f1c43e4d832"
+      "bytes": 5716,
+      "sha256": "b8fe20851504a6726bdac23d7352bc3920232f6b790aa9d20e950b39d0e57bdc"
     },
     "scripts/release_tests.py": {
       "bytes": 3160,
@@ -1039,8 +1039,8 @@
       "sha256": "6724b447be2657a19fc6f4aa2efdb62f501e6a1b58f9871e3cb4750b7ef6bc42"
     },
     "tests/packaging/test_production_profiles.py": {
-      "bytes": 21401,
-      "sha256": "e7acc71d86bea32b65c37d8466322d60158cfe4ce2c83bf66f357cffe258f538"
+      "bytes": 22437,
+      "sha256": "7456687a3fa91126bc6d6cfedeb2ad80c9e10879b75c6fff6e0829393696b043"
     },
     "tests/packaging/test_project_integrity.py": {
       "bytes": 8393,

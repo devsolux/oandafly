@@ -89,3 +89,6 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
   keyless signing after verifying per-build checksums and the release version; attach
   archives, bundles and a combined `SHA256SUMS` to published releases.
 - Add failure diagnostics for the Developer ID job and an actionlint runner-label config.
+- Forward a validated `LD_LIBRARY_PATH` to Linux release tests and builds; the CI-built
+  private SQLite was stripped from the child environment, skipping 225 tests and failing
+  the runtime probe. The unsigned-preflight test no longer depends on host SQLite.
