@@ -711,13 +711,24 @@ class AuthorityCoordinator:
             if sha256_json(current) != sha256_json(profile):
                 raise SafetyFence("Target profile changed during initialization")
 
-    def _validate_retired_source_cut(self, connection: sqlite3.Connection, transition_id: str) -> None:
-        row = connection.execute("SELECT source_json,stopped_proof_json FROM context_transitions WHERE authority_id=? AND transition_id=?", (self.authority_id, transition_id)).fetchone()
+    def _validate_retired_source_cut(self, connection: sqlite3.Connection, transition_id: str, *, live: bool = True) -> None:
+        row = connection.execute("SELECT source_json,stopped_proof_json,stopped_proof_sha256 FROM context_transitions WHERE authority_id=? AND transition_id=?", (self.authority_id, transition_id)).fetchone()
         if row is None or row["stopped_proof_json"] is None:
             raise SafetyFence("Target activation requires the durable source retirement proof")
         source = ContextKey.model_validate_json(row["source_json"])
         proof = StopProof.model_validate_json(row["stopped_proof_json"])
-        self.stop_verifier.verify_stop_in(connection, source, proof)
+        if live:
+            self.stop_verifier.verify_stop_in(connection, source, proof)
+        elif sha256_json(proof) != row["stopped_proof_sha256"]:
+            raise SafetyFence("The durable source retirement proof was altered")
+
+    def _armed_since_activation(self, connection: sqlite3.Connection, transition_id: str) -> bool:
+        activated = connection.execute(
+            "SELECT MAX(revision) FROM authority_audit WHERE authority_id=? AND event='TARGET_READY_UNARMED' AND json_extract(body,'$.transition_id')=?",
+            (self.authority_id, transition_id)).fetchone()[0]
+        return activated is not None and connection.execute(
+            "SELECT 1 FROM authority_audit WHERE authority_id=? AND event='EXPLICITLY_ARMED' AND revision>? LIMIT 1",
+            (self.authority_id, activated)).fetchone() is not None
 
     def revise_failed_target(self, transition_id: str, target: ContextKey, expected_revision: int, *, deadline: datetime | None = None, connection: sqlite3.Connection | None = None) -> TransitionRecord:
         """Explicitly revise an uninitialized target while the source stays retired."""
@@ -822,7 +833,13 @@ class AuthorityCoordinator:
                     raise SafetyFence("Unresolved safety fences block arming")
                 if row["transition_id"] is None:
                     raise SafetyFence("Arming requires a durable source retirement transition")
-                self._validate_retired_source_cut(connection, str(row["transition_id"]))
+                # The retirement proof is a point-in-time cut. It is re-verified live until
+                # this target's first arm (late source facts); afterwards the target's own
+                # trading legitimately moves the ledger past it, so re-arms only require
+                # the unaltered durable proof.
+                transition_id = str(row["transition_id"])
+                self._validate_retired_source_cut(connection, transition_id,
+                                                  live=not self._armed_since_activation(connection, transition_id))
                 profile.require_current(now)
                 revision = int(row["revision"]) + 1
                 connection.execute("UPDATE authority_state SET armed=1,revision=?,updated_at=? WHERE authority_id=?", (revision, now.isoformat(), self.authority_id))

@@ -341,8 +341,10 @@ class Outbox:
             stop_price=request.stop_price, expected=request.evidence, now=utc_now(), own_intent_id=record.intent_id,
             entry_bound=request.price if request.order_type == "LIMIT" else request.price_bound,
         )
-        if required != record.reservation:
-            raise SafetyFence("prepared reservation no longer matches independent risk calculations")
+        # A same-pair sibling prepared at another price bound re-prices this order's
+        # share of the bundle; an over-reservation is conservative, a shortfall is not.
+        if required > record.reservation:
+            raise SafetyFence("prepared reservation no longer covers independent risk calculations")
 
     def _assert_profile_scope_in(self, connection: sqlite3.Connection, request: OrderRequest) -> None:
         profile = self.authority.profile_in(connection, request.context, request.profile_version)

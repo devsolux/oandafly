@@ -9,7 +9,7 @@ from typing import Any
 
 from oandafly.adapters.http import ReadDocument
 from oandafly.adapters.v20 import V20ReadAdapter, transaction_id
-from oandafly.domain.errors import SafetyFence, Unavailable
+from oandafly.domain.errors import SafetyFence, Unavailable, ValidationFailure
 from oandafly.domain.instruments import CurrencyInstrument, currency_pair
 from oandafly.domain.primitives import money, require_utc, utc_now
 from oandafly.execution.risk import HomeConversions
@@ -26,7 +26,7 @@ def native_time(value: object) -> datetime:
         # Python preserves microseconds; the original response hash binds all
         # native nanosecond text. Bar identity uses exact aligned boundaries.
         return require_utc(datetime.fromisoformat(value.replace("Z", "+00:00")))
-    except ValueError as exc:
+    except (ValueError, ValidationFailure) as exc:
         raise Unavailable("Native timestamp is invalid") from exc
 
 
@@ -55,7 +55,7 @@ def quote_from_native(row: Mapping[str, Any], *, instrument: CurrencyInstrument,
                      quantum=Decimal(1).scaleb(-instrument.display_precision),
                      observed_at=native_time(row["time"]), received_at=received_at or utc_now(),
                      tradeable=tradeable, source="OANDA_" + environment)
-    except (KeyError, ValueError, TypeError) as exc:
+    except (KeyError, ValueError, TypeError, ValidationFailure) as exc:
         raise Unavailable("Native executable price is incomplete") from exc
 
 
@@ -113,7 +113,7 @@ class NativeReadAdapter(V20ReadAdapter):
                 native_conversions.append(HomeConversions(currency=row["currency"],
                     position_value=wire_decimal(row["positionValue"]),
                     account_gain=wire_decimal(row["accountGain"]), account_loss=wire_decimal(row["accountLoss"])))
-            except (KeyError, ValueError, TypeError) as exc:
+            except (KeyError, ValueError, TypeError, ValidationFailure) as exc:
                 raise Unavailable("Native home conversion is incomplete") from exc
         if len({value.currency for value in native_conversions}) != len(native_conversions):
             raise Unavailable("Duplicate home conversion currency")
@@ -156,7 +156,7 @@ class NativeReadAdapter(V20ReadAdapter):
                 if value.end > now or (result and result[-1].end > value.start):
                     raise ValueError("Future, duplicate or overlapping candle")
                 result.append(value)
-            except (KeyError, ValueError, TypeError) as exc:
+            except (KeyError, ValueError, TypeError, ValidationFailure) as exc:
                 raise Unavailable("Native completed bid/ask candle violates its causal contract") from exc
         return tuple(result)
 

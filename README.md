@@ -268,7 +268,7 @@ semantics; read the [runbook](docs/OPERATIONS.md) before using them.
 | `oandafly`, `oandafly desktop` | Open the Tk workspace; never starts a worker by itself |
 | `doctor [--desktop]` | Report desktop and worker prerequisites |
 | `validate-config --config FILE` | Validate private worker configuration metadata |
-| `run --config FILE` | Run the headless PRACTICE, SHADOW or LIVE worker |
+| `run --config FILE` | Run the headless PRACTICE, SHADOW or LIVE worker (Linux only; refused on macOS/Windows) |
 | `status`, `halt`, `flatten`, `resume`, `stop --authority ID` | Read worker status or queue a control (queued is not acknowledged) |
 | `graph-import` | Compile the MaleCNS graph artifact |
 | `train`, `train-watch` | Produce unqualified model candidates |

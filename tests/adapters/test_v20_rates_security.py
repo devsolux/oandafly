@@ -774,3 +774,16 @@ async def test_rejected_provenance_retains_original_raw_response(db):
             assert row["status"] == "UNVERIFIED_OR_UNKNOWN"
     finally:
         await instance.close()
+
+
+@pytest.mark.parametrize("row", [
+    {"bids": [{"price": "abc", "liquidity": 1}]},  # money() raises ValidationFailure, not ValueError
+    {"time": "2026-01-05T10:00:00"},  # naive timestamp: require_utc raises ValidationFailure
+])
+def test_malformed_native_price_scalars_become_sanitized_unavailable(row):
+    from oandafly.adapters.oanda.observations import quote_from_native
+    from oandafly.domain.instruments import CurrencyInstrument
+    native = {"instrument": "EUR_USD", "type": "PRICE", "status": "tradeable", "time": "2026-01-05T10:00:00Z",
+              "bids": [{"price": "1.10000", "liquidity": 1}], "asks": [{"price": "1.10020", "liquidity": 1}], **row}
+    with pytest.raises(Unavailable):
+        quote_from_native(native, instrument=CurrencyInstrument(name="EUR_USD"), environment="SANDBOX")

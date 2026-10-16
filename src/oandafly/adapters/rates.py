@@ -18,7 +18,7 @@ from pydantic import Field, field_validator, model_validator
 from oandafly.adapters.endpoints import RATES_ORIGIN
 from oandafly.adapters.governor import LocalRateGovernor
 from oandafly.adapters.http import BoundedHTTPReader, ReadDocument
-from oandafly.domain.errors import Conflict, RateLimited, SafetyFence, Unavailable
+from oandafly.domain.errors import Conflict, RateLimited, SafetyFence, Unavailable, ValidationFailure
 from oandafly.domain.instruments import currency_code
 from oandafly.domain.primitives import StrictModel, canonical_json, money, require_utc, utc_now
 from oandafly.security.credentials import CredentialReference, NativeVault
@@ -264,7 +264,7 @@ class RatesAdapter:
             if age < 0 or age > query.carry_forward_days:
                 raise ValueError("Publication requires unapproved carry-forward")
             return published_date, precision, age
-        except ValueError:
+        except (ValueError, ValidationFailure):
             raise Unavailable(
                 "EUCB publication is beyond the requested cutoff or carry-forward policy"
             ) from None
@@ -353,7 +353,7 @@ class RatesAdapter:
                 response_sha256=digest,
                 entitlement_evidence_sha256=self.entitlement.evidence_sha256,
             )
-        except (KeyError, TypeError, ValueError, ArithmeticError):
+        except (KeyError, TypeError, ValueError, ArithmeticError, ValidationFailure):
             raise Unavailable(
                 "Historical EUCB response does not satisfy the accounting provenance contract"
             ) from None

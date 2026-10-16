@@ -61,3 +61,18 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
   systemd credentials directory; add CLI help for control and training commands.
 - Close SQLite connections in the runtime probe and tests, set the pytest-asyncio loop
   scope, and skip the embedded-runtime probe test when optional extras are absent.
+
+## 1.0.0 remaining review findings
+
+- `oandafly run` and `run_worker` refuse macOS/Windows as documented, so the egress
+  quota never runs without a Linux boot identity (a reboot latched its clock fence).
+- Native adapters map `ValidationFailure` from malformed decimals and naive timestamps
+  to the sanitized `Unavailable` boundary.
+- Price a same-pair pending bundle at its most adverse member bound and require the
+  held reservation to cover, not equal, the recomputed need; a sibling prepared at
+  another bound no longer strands a prepared entry.
+- Re-verify the point-in-time source retirement proof live only until a target's first
+  arm; later re-arms require the unaltered durable proof, so a TRADING→TRADING handover
+  no longer locks out disarm→arm once the target trades.
+- Worker lifecycle tests for RESUME consumption, per-item protection isolation, expired
+  promotion grants, the deployment-path fallback and the qualified graph check.

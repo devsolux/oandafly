@@ -278,6 +278,42 @@ def test_source_lease_retires_before_target_resources_and_never_autoarms(core): 
     assert events == ["REQUESTED", "QUIESCING", "DRAINING", "RECONCILING", "SOURCE_LEASE_RETIRED", "RESETTING", "INITIALIZING_NEW", "TARGET_READY_UNARMED"]
 
 
+def _trading_to_trading_handover(db, coordinator: AuthorityCoordinator) -> Ledger:  # type: ignore[no-untyped-def]
+    enter_trading(coordinator)
+    ledger = Ledger(db)
+    ledger.establish_baseline("SANDBOX", "SYNTHETIC:PAPER:one", "EUR", Decimal("10000"), "701", utc_now())
+    coordinator.stop_verifier = NativeStopProofVerifier()
+    target = ContextKey(authority_id="test-authority", product_track="TRADING", account_profile_id="paper-v1",
+                        epoch=coordinator.snapshot().context.epoch + 1)
+    transition = coordinator.request_transition(target, coordinator.snapshot().revision, str(uuid4()))
+    drain = FixtureDrain(coordinator)
+    drain.account_change = {"covered_transaction_id": "701"}
+    assert coordinator.run_transition(transition.transition_id, drain, FixtureInitializer(coordinator)).state == "READY_UNARMED"
+    return ledger
+
+
+LATE_FINANCING = {"id": "704", "type": "DAILY_FINANCING", "financing": "-0.25", "accountBalance": "9999.75"}
+
+
+def test_first_arm_after_trading_handover_still_rejects_late_source_facts(core):  # type: ignore[no-untyped-def]
+    db, coordinator, _ = core
+    ledger = _trading_to_trading_handover(db, coordinator)
+    ledger.ingest("SANDBOX", "SYNTHETIC:PAPER:one", LATE_FINANCING)
+    with pytest.raises(SafetyFence, match="later native fact"):
+        arm(coordinator)
+    assert not coordinator.snapshot().armed
+
+
+def test_rearm_after_trading_handover_does_not_reverify_point_in_time_retirement(core):  # type: ignore[no-untyped-def]
+    db, coordinator, _ = core
+    ledger = _trading_to_trading_handover(db, coordinator)
+    arm(coordinator)
+    ledger.ingest("SANDBOX", "SYNTHETIC:PAPER:one", LATE_FINANCING)  # the target's own account activity
+    coordinator.disarm()
+    arm(coordinator)
+    assert coordinator.snapshot().armed
+
+
 @pytest.mark.parametrize("stage", ["quiesce", "drain", "reconcile"])
 def test_each_drain_failure_prevents_target_initialization_and_retirement(core, stage: str):  # type: ignore[no-untyped-def]
     _, coordinator, _ = core

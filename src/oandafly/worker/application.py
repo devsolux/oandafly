@@ -747,4 +747,8 @@ class TradingWorker:
 
 
 def run_worker(configuration: Path) -> None:
+    from oandafly.platforms import WORKER_PLATFORM_FENCE, local_worker_available
+    if not local_worker_available():
+        # Without a Linux boot identity a reboot would also latch the egress quota's clock fence.
+        raise SafetyFence(WORKER_PLATFORM_FENCE)
     asyncio.run(TradingWorker(configuration).run())

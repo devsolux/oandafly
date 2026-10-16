@@ -13,6 +13,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
+from oandafly.platforms import local_worker_available
 from oandafly.ui.model import validate_authority
 
 
@@ -44,7 +45,7 @@ class DesktopBackend:
                 "mode": config.mode, "account_id": config.account_id, "instruments": list(config.instruments),
                 "schema_valid": True, "authorization_verified": False,
                 "configuration_sha256": hashlib.sha256(config.model_dump_json().encode()).hexdigest(),
-                "local_worker_platform_available": sys.platform == "linux"}
+                "local_worker_platform_available": local_worker_available()}
 
     def status(self, authority: str) -> dict:
         from oandafly.worker.control import read_status

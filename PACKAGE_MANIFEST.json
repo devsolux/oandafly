@@ -1,6 +1,6 @@
 {
   "application_version": "1.0.0",
-  "file_count_excluding_manifest": 275,
+  "file_count_excluding_manifest": 276,
   "files": {
     ".gitattributes": {
       "bytes": 196,
@@ -23,8 +23,8 @@
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
     "CHANGELOG.md": {
-      "bytes": 4041,
-      "sha256": "97cd74fd543d57ffb19ed9c5e93140fe60bac87445456814a3bdbd49647c1ed1"
+      "bytes": 5000,
+      "sha256": "1d5d41b9d4865774078d0efbbd55840c628499d26d3ad6b54049e6eb761be570"
     },
     "LICENSE": {
       "bytes": 1065,
@@ -43,8 +43,8 @@
       "sha256": "995465102639a0247e6e65a7b0721b52892ade05b6b4df51b5bae3bdc8223ccb"
     },
     "README.md": {
-      "bytes": 16301,
-      "sha256": "87670d15cb59eef661de1d904fb0861e69feaf8752be977b8ba72a3033ec50c1"
+      "bytes": 16340,
+      "sha256": "e707ee935caf304c8522ece94b11b91e51a00286664a43a2d31d921a20057259"
     },
     "deploy/systemd/README.md": {
       "bytes": 3087,
@@ -587,8 +587,8 @@
       "sha256": "36442aefea9bf3369d7d64d1a8bea62680c02dcfd26b5761062d91b42660f0bc"
     },
     "src/oandafly/__main__.py": {
-      "bytes": 12608,
-      "sha256": "7f429f0ad3b09cd5f2f64f58855596d0005d1be7985eb0e2f4da73216d9de6c1"
+      "bytes": 12948,
+      "sha256": "cdd8f1ba678966e92ec25914eef55f7fb2b43c9cb5ad0d7ec0879a2c9abdadad"
     },
     "src/oandafly/accounts/__init__.py": {
       "bytes": 70,
@@ -631,16 +631,16 @@
       "sha256": "6278bed9de74df774a9ffd8f83b09af7fde27a386ad48b90c621e9f7b4fe5b7d"
     },
     "src/oandafly/adapters/oanda/observations.py": {
-      "bytes": 10904,
-      "sha256": "6bfcec4d680467598e1dd75f654e18a15289f4f806e6af0c4c4c49cf084e8377"
+      "bytes": 11001,
+      "sha256": "183bdab07fa7eaa66aeeb88c1d5b2dd4f1cf80753a8714dcfc19dfd45a466a5a"
     },
     "src/oandafly/adapters/rates.py": {
-      "bytes": 18938,
-      "sha256": "0bcb197b1dcebb7b3b770138584d92c12bed6ff755587f61c5ffe6f30a5b5461"
+      "bytes": 18997,
+      "sha256": "4be5cd44867589d3ce57d64785e9e5ad878a3bbd9fe5c41ada5d558fda8b0b47"
     },
     "src/oandafly/adapters/v20.py": {
-      "bytes": 13112,
-      "sha256": "11f48f4f32c075372668595fcb7e2a298cb7b4912d3c7538fa19f577a2d6c516"
+      "bytes": 13150,
+      "sha256": "eeb893273001ef607c9af77682664275667e7874bb806dce2147dae9f59d857a"
     },
     "src/oandafly/desktop.py": {
       "bytes": 1186,
@@ -655,8 +655,8 @@
       "sha256": "64174d33d061595ddd6a9b6f5008cef6153c4d714ef5c2cfec7652ea54a2b44c"
     },
     "src/oandafly/domain/context.py": {
-      "bytes": 57866,
-      "sha256": "93c7a7bf8162195c46d00d90c7dced7826d06ac356c2c3523556b9c0adbd99ad"
+      "bytes": 59158,
+      "sha256": "6fbb7425d2d287835a8e4334ed3d42814cfc5f71c33780db8186fbed6a766d98"
     },
     "src/oandafly/domain/decisions.py": {
       "bytes": 2688,
@@ -691,8 +691,8 @@
       "sha256": "0b064d0d9351b337255ebba5077e45223b20b372e87b0b839c30ebae40239370"
     },
     "src/oandafly/execution/outbox.py": {
-      "bytes": 24078,
-      "sha256": "df592a405c050536aef1dc25c58f2a900b57445442fac94f87c045b3c1d7c863"
+      "bytes": 24249,
+      "sha256": "40473e0f74b3147b9dc538621d2cf58f48040b5fceed9d94cabb942fe669c262"
     },
     "src/oandafly/execution/reconciler.py": {
       "bytes": 43783,
@@ -703,8 +703,8 @@
       "sha256": "3c085b41ca2a5253f1696b973b3d7e2c8dddcf1dc5a90ea4d2268af1148e7d65"
     },
     "src/oandafly/execution/risk.py": {
-      "bytes": 29233,
-      "sha256": "212dad21d32ea68cbba3be5a249ba0efb1ac39dcc790dfab9ab9cda4e87ec005"
+      "bytes": 29820,
+      "sha256": "ce60929c988c977c926ae6caa25792f4659796bacaa3b333b823dcaa90101d6d"
     },
     "src/oandafly/macos.py": {
       "bytes": 1150,
@@ -771,8 +771,8 @@
       "sha256": "ca5886b5379ee88af33acc7fb57cd31127394ce25fee282274bf142aba2ad87e"
     },
     "src/oandafly/platforms.py": {
-      "bytes": 1940,
-      "sha256": "7f22b22e6c6e0220c07184f59291c6f5dbed0f42b991ae854481e60ffc792fbe"
+      "bytes": 2277,
+      "sha256": "c0e83d7dc7f4bebdb89bf283127873874b5c8f98f2df65753532500d9a3f35ae"
     },
     "src/oandafly/portfolio/__init__.py": {
       "bytes": 45,
@@ -947,8 +947,8 @@
       "sha256": "b711a0be9de9f29c69f60ba6d6cf4de9d03a49ed1feaf54ca8c2f23fc374f5f5"
     },
     "src/oandafly/ui/controller.py": {
-      "bytes": 5546,
-      "sha256": "eec3743f8fe03b97e90baf996a34d3b5cb1db4bfae539231fe6c668b3e4dd2f0"
+      "bytes": 5601,
+      "sha256": "29519d98e81546fd5baa66bdb6141d0036c69bcd6e09a1284815936364632ed5"
     },
     "src/oandafly/ui/model.py": {
       "bytes": 2082,
@@ -967,8 +967,8 @@
       "sha256": "a0ae9a4da72b7bf1c36ad0c5021e64f4a1250e7eb12a14d523991c1884eb5434"
     },
     "src/oandafly/worker/application.py": {
-      "bytes": 46019,
-      "sha256": "67b5ce1e1b7c777bb71a16804d1709f00f0c1a4e19c849a9e3ca6e16b5b7936b"
+      "bytes": 46284,
+      "sha256": "729e76ee94b37873de716556c2f0f8388bba32548ba6834865f0eb327603ea7f"
     },
     "src/oandafly/worker/configuration.py": {
       "bytes": 4241,
@@ -1003,16 +1003,16 @@
       "sha256": "38f366bf1eee86b5f31362a352fce9ca3c381e3e5f36ea2b6af1741db6f07dd3"
     },
     "tests/adapters/test_v20_rates_security.py": {
-      "bytes": 27768,
-      "sha256": "530c6999a856ce9fa97563b32333c310d0bd5bde260452ef2989df8fe2546ad7"
+      "bytes": 28581,
+      "sha256": "011f512f7f946b08a91c8f587f75ee70a8fbe1d6fb4e9ea4431d2a30b334d729"
     },
     "tests/desktop/__init__.py": {
       "bytes": 78,
       "sha256": "915f3d8fe4304ca97e9ec5123c1e8ec836429ac92d11801fea353ecc981f9b81"
     },
     "tests/desktop/test_contracts.py": {
-      "bytes": 13956,
-      "sha256": "b5ebd5b6fa12ef3f5b18a947c013e6428ac9032e8595daad547c5274f84f16f0"
+      "bytes": 14846,
+      "sha256": "ae83674321fa7d7c267cb168762e565d1e76f6f1ea79bff27e6f359a42299f2f"
     },
     "tests/desktop/test_gui.py": {
       "bytes": 6246,
@@ -1023,12 +1023,12 @@
       "sha256": "531493c668fa5db604d262b7a9cc0c84bcc7fb2ece6822ae11a513f1606b2dfa"
     },
     "tests/domain/test_context.py": {
-      "bytes": 32117,
-      "sha256": "8eaccb3d2bcc45a1616b28c2c65b1696a8bda14f8e7353c91f29166b584d2fd2"
+      "bytes": 33925,
+      "sha256": "90f85b89b41e849aaa9f376706fc4dd2d044d7baa0d952960fd8266373d9d31a"
     },
     "tests/faults/test_context_outbox_product.py": {
-      "bytes": 43434,
-      "sha256": "171c6e3c3290121018d6af9a54147785cd179896077ac361bb7459ce31b478cf"
+      "bytes": 44200,
+      "sha256": "c32250a78dbc2346c3aaa271c1a77011adfca9f5626f5da3c4c7f640008b7e47"
     },
     "tests/integration/test_paper.py": {
       "bytes": 10726,
@@ -1097,6 +1097,10 @@
     "tests/unit/test_security_boundaries.py": {
       "bytes": 8570,
       "sha256": "e03065f50f91735f251133fc9aadc94337a08c5f8a06a55d5d0dbdb9f6553071"
+    },
+    "tests/unit/test_worker_lifecycle.py": {
+      "bytes": 8408,
+      "sha256": "7a2afd2a24e0c8b31c564d00865c970bef533daa1bcaae31081b1a3e8e775e0d"
     },
     "uv.lock": {
       "bytes": 76156,

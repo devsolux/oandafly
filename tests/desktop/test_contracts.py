@@ -31,6 +31,24 @@ def test_explicit_native_targets(system, machine, target):
     assert native_target(system, machine, bits=64).key == target
 
 
+@pytest.mark.parametrize('system,available', [('linux',True),('darwin',False),('win32',False)])
+def test_local_worker_is_linux_only(system, available):
+    from oandafly.platforms import local_worker_available
+    assert local_worker_available(system) is available
+
+
+def test_cli_run_is_fenced_off_linux_before_touching_configuration(monkeypatch, capsys, tmp_path):
+    import json
+    from oandafly import __main__, platforms
+    from oandafly.domain.errors import SafetyFence
+    from oandafly.worker.application import run_worker
+    monkeypatch.setattr(platforms, 'local_worker_available', lambda system=None: False)
+    assert __main__.main(['run', '--config', str(tmp_path / 'absent.json')]) == 2
+    assert json.loads(capsys.readouterr().err)['code'] == 'UNSUPPORTED_WORKER_PLATFORM'
+    with pytest.raises(SafetyFence, match='Linux'):
+        run_worker(tmp_path / 'absent.json')
+
+
 @pytest.mark.parametrize('system,machine,bits', [
     ('darwin','x86_64',64), ('linux','aarch64',64), ('win32','arm64',64),
     ('win32','AMD64',32), ('linux','i686',32), ('freebsd','x86_64',64),

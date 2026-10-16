@@ -577,6 +577,18 @@ def test_worker_retries_unsent_protective_close_under_new_identity(harness: Harn
     assert worker._next_recovery_id(first, trade) is None  # a sent close is never multiplied
 
 
+@pytest.mark.parametrize("first_bound,sibling_bound", [("1.10900", "1.10100"), ("1.10100", "1.10900")])
+def test_same_pair_sibling_at_another_bound_does_not_strand_prepared_entry(
+        harness: Harness, first_bound: str, sibling_bound: str) -> None:
+    async def scenario() -> None:
+        await harness.paper.quote(D("1.10000"), D("1.10020"))
+        first = harness.outbox.prepare(harness.request(price_bound=D(first_bound)))
+        harness.outbox.prepare(harness.request(price_bound=D(sibling_bound)))
+        gateway = NativeMutationGateway(harness.outbox, transport=harness.paper, governor=harness.governor, reducer=harness.reducer)
+        assert (await gateway.dispatch(first.intent_id)).status == OutboxStatus.ACK_BY_FILL
+    asyncio.run(scenario())
+
+
 def test_recovery_transport_skipping_its_guard_remains_ambiguous(harness: Harness) -> None:
     trade = _open_paper_trade(harness)
 

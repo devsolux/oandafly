@@ -112,6 +112,11 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(result, indent=2))
             return 0 if (result["desktop"]["prerequisites_satisfied"] if args.desktop else result["runtime_prerequisites_satisfied"]) else 2
         if args.command == "run":
+            from oandafly.platforms import WORKER_PLATFORM_FENCE, local_worker_available
+            if not local_worker_available():
+                print(json.dumps({"status": "BLOCKED", "code": "UNSUPPORTED_WORKER_PLATFORM",
+                                  "message": WORKER_PLATFORM_FENCE}), file=sys.stderr)
+                return 2
             from oandafly.paths import configure_runtime_storage
             configure_runtime_storage()  # before importing runtime services, per its contract
             from oandafly.worker.application import run_worker

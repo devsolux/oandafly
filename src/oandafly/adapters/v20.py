@@ -201,7 +201,7 @@ class V20ReadAdapter:
                     except ValueError:
                         unsupported.add(name[:128])
             return AccountRead(summary, document, tuple(sorted(unsupported)))
-        except (KeyError, ValueError, TypeError):
+        except (KeyError, ValueError, TypeError, ValidationFailure):
             raise Unavailable("Native account snapshot is incomplete or inconsistent") from None
 
     async def instruments(self, account_id: str) -> InstrumentRead:
@@ -243,7 +243,7 @@ class V20ReadAdapter:
                         margin_rate=row["marginRate"],
                     ))
                 )
-            except (KeyError, ValueError, TypeError):
+            except (KeyError, ValueError, TypeError, ValidationFailure):
                 raise Unavailable("Currency instrument precision or margin metadata is invalid") from None
         return InstrumentRead(tuple(admitted), tuple(excluded), document.sha256)
 

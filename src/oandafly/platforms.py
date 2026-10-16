@@ -35,6 +35,14 @@ def native_target(system: str | None = None, machine: str | None = None, *, bits
     raise ValueError("Supported desktop targets: macOS ARM64, Windows AMD64 and Linux AMD64 (64-bit Python).")
 
 
+WORKER_PLATFORM_FENCE = "The trading worker runs only on Linux; macOS/Windows worker start is fenced"
+
+
+def local_worker_available(system: str | None = None) -> bool:
+    """The headless worker is Linux-only: seccomp inference and the egress quota's boot identity."""
+    return (sys.platform if system is None else system) == "linux"
+
+
 def host_report() -> dict:
     from oandafly.neural.containment import capability
     try:

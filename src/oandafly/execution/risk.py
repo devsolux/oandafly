@@ -505,6 +505,7 @@ class RiskRegistry:
         import json
         other_pair_reservations = ZERO
         other_pair_units = ZERO
+        sibling_bound = ZERO
         for pending in rows:
             if pending["intent_id"] == own_intent_id:
                 continue
@@ -512,6 +513,9 @@ class RiskRegistry:
             if saved["instrument"] == instrument:
                 other_pair_reservations += money(pending["reservation"])
                 other_pair_units += abs(money(saved["units"]))
+                bound = saved.get("price") if saved.get("order_type", "MARKET") == "LIMIT" else saved.get("price_bound")
+                if bound is not None:
+                    sibling_bound = max(sibling_bound, money(bound))
         if metadata.current_gross_units + other_pair_units + abs(units) > metadata.maximum_position_units:
             raise SafetyFence("pending and unreflected fills exhaust the gross position limit")
         margin = observation.margin.model_copy(update={
@@ -531,7 +535,11 @@ class RiskRegistry:
         # Reserve the complete tier cost of the pending bundle, allocating any
         # higher-tier increment to this new intent. Two concurrent entries cannot
         # both pretend to occupy the cheapest remaining tier.
-        bundle_margin = incremental_margin(abs(units) + other_pair_units, adverse_metadata)
+        # Price the bundle at its most adverse member bound so each reservation is
+        # reproducible whatever order the same-pair siblings were prepared in.
+        bundle_metadata = (adverse_metadata if sibling_bound <= adverse_metadata.ask
+                           else metadata.model_copy(update={"ask": sibling_bound}))
+        bundle_margin = incremental_margin(abs(units) + other_pair_units, bundle_metadata)
         required = max(incremental_margin(units, adverse_metadata), bundle_margin - other_pair_reservations)
         if required > spendable_margin(margin).spendable:
             raise SafetyFence("per-account native/stress margin bounds do not fund this order")
