@@ -111,3 +111,10 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
 - Release scope: an experimental source release. Native desktop archives, the MaleCNS
   dataset, trained weights and broker qualification remain outside v1.0.0 as documented
   in `docs/ENGINEERING_STATUS.md`.
+
+## Unreleased
+
+- Rewrite `README.md` as a structured project overview: badges, table of contents,
+  highlights, a project-status table, getting-started steps, worker controls, security
+  model, development and CI workflow summaries, release verification and a complete
+  documentation index. The application version remains 1.0.0.
