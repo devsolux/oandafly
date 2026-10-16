@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sqlite3
 import subprocess
 import sys
@@ -499,6 +500,14 @@ def test_restart_disarms_and_requires_a_new_proven_recovery_handover(tmp_path: P
         db.close()
 
 
+def child_environment(*pythonpath: Path) -> dict[str, str]:
+    """Minimal child environment; keep only the linker path selecting the private SQLite."""
+    env = {"PYTHONPATH": os.pathsep.join(str(path) for path in pythonpath)}
+    if os.environ.get("LD_LIBRARY_PATH"):
+        env["LD_LIBRARY_PATH"] = os.environ["LD_LIBRARY_PATH"]
+    return env
+
+
 def test_same_process_and_real_second_process_cannot_steal_authority(core, tmp_path: Path):  # type: ignore[no-untyped-def]
     db, coordinator, _ = core
     with pytest.raises(Conflict):
@@ -523,7 +532,7 @@ finally:
         db.close()
 """
     completed = subprocess.run([sys.executable, "-c", code, str(db.path), str(tmp_path / "locks")],
-                               env={"PYTHONPATH": str(Path(__file__).resolve().parents[2] / "src")},
+                               env=child_environment(Path(__file__).resolve().parents[2] / "src"),
                                text=True, capture_output=True, timeout=15, check=True)
     assert completed.stdout.strip() == "blocked"
     assert coordinator.snapshot().context.product_track == "DATA"
@@ -565,7 +574,7 @@ os._exit(23)
     path, locks = tmp_path / "crashed.sqlite3", tmp_path / "locks"
     completed = subprocess.run(
         [sys.executable, "-c", code, str(path), str(locks)],
-        env={"PYTHONPATH": str(source_root) + ":" + str(source_root / "src") + ":" + str(Path(__file__).parent)},
+        env=child_environment(source_root, source_root / "src", Path(__file__).parent),
         text=True, capture_output=True, timeout=15, check=False,
     )
     assert completed.returncode == 23, completed.stderr
