@@ -93,3 +93,7 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
   private SQLite was stripped from the child environment, skipping 225 tests and failing
   the runtime probe. The unsigned-preflight test no longer depends on host SQLite, and
   the authority process tests keep `LD_LIBRARY_PATH` in their minimal child environment.
+- Upload only the quality evidence files from CI; the first fully green `ci.yml` run
+  passed both jobs with 709 tests in the locked gate.
+- Add `AGENTS.md` and `CLAUDE.md`: `main`-only branch policy, environment setup,
+  pre-commit checks, code/testing conventions and CI usage for coding agents.

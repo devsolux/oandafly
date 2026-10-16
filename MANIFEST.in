@@ -1,4 +1,4 @@
-include README.md NOTICE.md CHANGELOG.md LICENSE Makefile pyproject.toml MANIFEST.in
+include README.md NOTICE.md CHANGELOG.md AGENTS.md CLAUDE.md LICENSE Makefile pyproject.toml MANIFEST.in
 include .gitignore .gitattributes dev.sh dev.ps1 .python-version requirements-build.in PACKAGE_MANIFEST.json
 include uv.lock requirements.lock requirements-dev.lock requirements-build.lock
 recursive-include .github *.yml *.yaml

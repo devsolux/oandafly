@@ -1,6 +1,6 @@
 {
   "application_version": "1.0.0",
-  "file_count_excluding_manifest": 277,
+  "file_count_excluding_manifest": 279,
   "files": {
     ".gitattributes": {
       "bytes": 196,
@@ -26,17 +26,25 @@
       "bytes": 5,
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
+    "AGENTS.md": {
+      "bytes": 4541,
+      "sha256": "3c84422bc007fbaf52f1b182f85b81224d1e82e01b4f2958c3d45e8f955c25bf"
+    },
     "CHANGELOG.md": {
-      "bytes": 6193,
-      "sha256": "dfbbdd07383c1ae58a9dfbccdc812ff72575ec54ad5092d7d23fc760fb2de13b"
+      "bytes": 6491,
+      "sha256": "b5c7c5fa6c9ba2d14e80fdb9166275a0011661e4f16f4b17cf73c386b613cbbc"
+    },
+    "CLAUDE.md": {
+      "bytes": 420,
+      "sha256": "3514ce1b8b9938be0508b3aff6cc4765fc6e5997b3a0d1f33c2a8598f8842882"
     },
     "LICENSE": {
       "bytes": 1065,
       "sha256": "b301b767ceaab259b95db3eca9e0b5f2eaf33dbf1220276065bf2f2ad2130958"
     },
     "MANIFEST.in": {
-      "bytes": 816,
-      "sha256": "2ad50be84b17b494da1ec7bc03511ad17f125ed96d3b1da6935775e9235228df"
+      "bytes": 836,
+      "sha256": "d9d70f44955acc86a9f9eda60c7138a737aa3c5fd5f409127fa5b78a3f67f0dc"
     },
     "Makefile": {
       "bytes": 5565,
@@ -559,8 +567,8 @@
       "sha256": "47ef46b32598c41187ca375e83be2c3ef1995c102121789111068c086e54ee55"
     },
     "scripts/project_integrity.py": {
-      "bytes": 12779,
-      "sha256": "5cee55bbf1aa2220a64921031b04b1100fbf5faff1fac94b82ceb0c13dbeb6da"
+      "bytes": 12805,
+      "sha256": "9761d1b23069ca17d748c5f5ecd34dad34f7ec719a264c9a592dbbe3a09c2bf6"
     },
     "scripts/release_artifacts.py": {
       "bytes": 4717,

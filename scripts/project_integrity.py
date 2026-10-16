@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_NAME = "PACKAGE_MANIFEST.json"
 TOP_FILES = frozenset({
     ".gitignore", ".python-version", "README.md", "NOTICE.md", "CHANGELOG.md", "LICENSE",
-    "MANIFEST.in", "Makefile", "pyproject.toml", "requirements-build.in", "dev.sh", "dev.ps1", ".gitattributes",
+    "AGENTS.md", "CLAUDE.md", "MANIFEST.in", "Makefile", "pyproject.toml", "requirements-build.in", "dev.sh", "dev.ps1", ".gitattributes",
     "uv.lock", "requirements.lock", "requirements-dev.lock", "requirements-build.lock",
 })
 TOP_DIRS = frozenset({"src", "tests", "scripts", "docs", "examples", ".github", "deploy", "packaging"})
