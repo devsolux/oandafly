@@ -76,3 +76,16 @@ and runtime/live qualification remain incomplete; no placeholder locks are shipp
   no longer locks out disarm→arm once the target trades.
 - Worker lifecycle tests for RESUME consumption, per-item protection isolation, expired
   promotion grants, the deployment-path fallback and the qualified graph check.
+
+## 1.0.0 CI and release signing
+
+- Update workflow actions to their latest releases (checkout v7.0.1, setup-python v7.0.0,
+  upload-artifact v7.0.2, download-artifact v8.0.2, cosign-installer v4.1.2 with cosign
+  v3.1.3), pinned to full commit SHAs; checkouts no longer persist credentials, and runs
+  use concurrency groups. Both workflows keep `workflow_dispatch`.
+- `desktop.yml` also runs when a GitHub release is published; build jobs previously
+  skipped every non-`main` ref, including release tags.
+- Sign qualified desktop archives, checksums and build receipts with Sigstore cosign
+  keyless signing after verifying per-build checksums and the release version; attach
+  archives, bundles and a combined `SHA256SUMS` to published releases.
+- Add failure diagnostics for the Developer ID job and an actionlint runner-label config.

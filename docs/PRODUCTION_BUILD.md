@@ -128,8 +128,28 @@ newer OS result can substitute for the required final-payload acceptance.
    authorization remain independent. No broker secrets, account enrollment, real
    OANDA calls or orders are part of these checks.
 
-CI uses explicitly configured interactive self-hosted native runners, with a
-protected signed environment restricted to the trusted main branch. The unsigned job
-has no signing inputs and runs the same common gates. Failed jobs upload diagnostics
-under a separate unverified label. Linux/Windows source/native job scopes remain
-explicit; neither was natively qualified on this Mac.
+CI uses explicitly configured interactive self-hosted native runners (GitHub Actions
+runner v2.327.0 or newer, for Node 24 actions). `desktop.yml` runs on manual dispatch
+from `main` and when a GitHub release is published. Release builds run on the release
+tag, so the protected signing environment's deployment rules must allow release tags as
+well as `main`. The unsigned job has no signing inputs and runs the same common gates.
+Failed jobs upload diagnostics under a separate unverified label. Linux/Windows
+source/native job scopes remain explicit; neither was natively qualified on this Mac.
+Actions are pinned to full commit SHAs.
+
+After all three unsigned targets qualify, a GitHub-hosted job verifies each build's
+`SHA256SUMS`, requires a release tag to match the built version, and signs the archives,
+checksums, `build.json` and `provenance.json` with Sigstore cosign keyless signing (the
+workflow's OIDC identity; no long-lived key). Each bundle is verified before it is kept.
+A published release receives the archives, their `.sigstore.json` bundles and a combined
+`SHA256SUMS` with its bundle. Verify a download with:
+
+```bash
+cosign verify-blob --bundle oandafly-1.0.0-<target>-<profile>-<run>.zip.sigstore.json \
+  --certificate-identity-regexp '^https://github\.com/devsolux/oandafly/\.github/workflows/desktop\.yml@refs/(tags/.+|heads/main)$' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  oandafly-1.0.0-<target>-<profile>-<run>.zip
+```
+
+A Sigstore signature proves which workflow run produced the bytes. It does not replace
+Developer ID/notarization or Windows Authenticode trust and is not trading qualification.

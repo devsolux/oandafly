@@ -1,18 +1,22 @@
 {
   "application_version": "1.0.0",
-  "file_count_excluding_manifest": 276,
+  "file_count_excluding_manifest": 277,
   "files": {
     ".gitattributes": {
       "bytes": 196,
       "sha256": "148c3ac830f26eb4aa6ab8bba57ee8f93d45a5bf278f922ef7c783b71331c680"
     },
+    ".github/actionlint.yaml": {
+      "bytes": 172,
+      "sha256": "724e10c99ad54431865daa72c1603237ee8761771742520912fe855e52cf6535"
+    },
     ".github/workflows/ci.yml": {
-      "bytes": 3027,
-      "sha256": "05f9aa8923bb9f6932d1d962ba15eca0ff44b54730a1a645ede6868ca0617edc"
+      "bytes": 3541,
+      "sha256": "8365a9858b27c25caeb2f48ac5e3db6f6fe001210fbe35dfb4cc902fc8cc2df3"
     },
     ".github/workflows/desktop.yml": {
-      "bytes": 3142,
-      "sha256": "a28bccca8cc85fe89d4d007b54db21ce02bd059994e399980d0648c07807077f"
+      "bytes": 8835,
+      "sha256": "f64884aa934ef3b5d225d1ff93e5ce2169aee682d286e0bb6e12b35e4bbac46e"
     },
     ".gitignore": {
       "bytes": 491,
@@ -23,8 +27,8 @@
       "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
     },
     "CHANGELOG.md": {
-      "bytes": 5000,
-      "sha256": "1d5d41b9d4865774078d0efbbd55840c628499d26d3ad6b54049e6eb761be570"
+      "bytes": 5840,
+      "sha256": "59470d7f110216fd0b844c376ed3bc736ab9b32a0488a392327dfa17502228f1"
     },
     "LICENSE": {
       "bytes": 1065,
@@ -103,8 +107,8 @@
       "sha256": "0e9fd28ad128ad84b349aa536c5e13f03cb1e47caa07e0683be785333014be54"
     },
     "docs/PRODUCTION_BUILD.md": {
-      "bytes": 8478,
-      "sha256": "46d07fa90e1d522260d6be62c212a5fe944dea011665b5a171c8609001386687"
+      "bytes": 9761,
+      "sha256": "705e88d518d870aa7372793dd205b00cebaeb2f7398a1e3308b4b2d9307fd668"
     },
     "docs/PROJECT_COMPLETENESS.md": {
       "bytes": 4113,
